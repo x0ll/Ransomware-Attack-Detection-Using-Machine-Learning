@@ -150,3 +150,16 @@ The ecosystem utilizes a relational SQLite layout designed to keep the analytica
 ## 🛡️ Security Disclaimer
 
 This system is engineered for advanced academic profiling, automated malware identification prototyping, and engineering graduation defense showcases. Execute untested or suspicious payloads exclusively within heavily sandboxed environments (e.g., dedicated VirtualBox instances).
+
+---
+
+## 🤝 Contributing
+
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/x0ll/Ransomware-Attack-Detection-Using-Machine-Learning/issues).
+
+
+
+---
+
+*Developed with ❤️ for Advanced Malware Detection and Security.*
