@@ -71,15 +71,82 @@ SARMZ-RansomGuard/
     │   └── lib/                    <- Persistent State, Localization & Theme Stores
     ├── index.html
     └── package.json                <- Node.js Package Manifest
-🚀 Getting StartedEnsure your deployment machine satisfies the configuration environment requirements before initialization.PrerequisitesNode.js: Version 18.0.0 or higherPython: Version 3.11.x recommendedNative Admin Privileges (required for local background directory filesystem auditing)1. Repository Access & DeploymentBashgit clone [https://github.com/x0ll/Ransomware-Attack-Detection-Using-Machine-Learning.git](https://github.com/x0ll/Ransomware-Attack-Detection-Using-Machine-Learning.git)
+## 🚀 Getting Started
+
+Ensure your deployment machine satisfies the configuration environment requirements before initialization.
+
+### Prerequisites
+- **Node.js**: Version 18.0.0 or higher
+- **Python**: Version 3.11.x recommended
+- **Native Admin Privileges** (required for local background directory filesystem auditing)
+
+### 1. Repository Access & Deployment
+
+```bash
+git clone https://github.com/x0ll/Ransomware-Attack-Detection-Using-Machine-Learning.git
 cd Ransomware-Attack-Detection-Using-Machine-Learning
-2. Backend & EDR Environment SetupInitialize the backend environment, parse local dependencies, and spin up the microservices. The structural SQLite tables materialize instantly upon execution.Bash# Install dependencies
+```
+
+### 2. Backend & EDR Environment Setup
+
+Initialize the backend environment, parse local dependencies, and spin up the microservices. The structural SQLite tables materialize instantly upon execution.
+
+```bash
+# Install dependencies
 pip install -r requirements.txt
 
 # Launch the Primary Web API Service
 python server.py
-The API server boots up locally on: http://localhost:50003. Launching the EDR Background AgentTo spin up the continuous endpoint system monitor that safeguards local directories against active ransomware injections:Bashpython monitor.py
-4. Client Web Core InitializationOpen an isolated shell environment to initialize the front-end rendering server.Bashcd frontend
+```
+
+The API server boots up locally on: `http://localhost:5000`
+
+### 3. Launching the EDR Background Agent
+
+To spin up the continuous endpoint system monitor that safeguards local directories against active ransomware injections:
+
+```bash
+python monitor.py
+```
+
+### 4. Client Web Core Initialization
+
+Open an isolated shell environment to initialize the front-end rendering server.
+
+```bash
+cd frontend
 npm install
 npm run dev
-The web graphical client launches on: http://localhost:5173🔗 API ReferenceSecure routes require valid Authorization bearer tokens. Unauthenticated evaluations fallback gracefully under global Guest flags.EndpointMethodPayload / ContextSystem Action/api/auth/registerPOST{username, email, password}Generates a new secure system profile/api/auth/loginPOST{username, password}Validates profile and returns access token/api/analyzePOSTForm-Data (Binary payload)Dissects file attributes via ML Classifier/api/scansGETHeaders: Token (Optional)Pulls localized filtered historic telemetry/api/scansDELETEHeaders: TokenCompletely purges scoped historical logs/api/healthGETNoneReturns operational health status of backend🗄️ Database StructureThe ecosystem utilizes a relational SQLite layout designed to keep the analytical state clean and responsive:Users Table: Manages encrypted cryptographic profiles (id, username, email, password_hash, verified).Scans Table: Centralizes real-time audit logs collected from both the manual Web uploader interface and the automatic EDR Background Agent (id, filename, time, overall_label, confidence, username, and ML metadata metrics).🛡️ Security DisclaimerThis system is engineered for advanced academic profiling, automated malware identification prototyping, and engineering graduation defense showcases. Execute untested or suspicious payloads exclusively within heavily sandboxed environments (e.g., dedicated VirtualBox instances).
+```
+
+The web graphical client launches on: `http://localhost:5173`
+
+---
+
+## 🔗 API Reference
+
+Secure routes require valid Authorization bearer tokens. Unauthenticated evaluations fallback gracefully under global Guest flags.
+
+| Endpoint | Method | Payload / Context | System Action |
+| :--- | :--- | :--- | :--- |
+| `/api/auth/register` | `POST` | `{username, email, password}` | Generates a new secure system profile |
+| `/api/auth/login` | `POST` | `{username, password}` | Validates profile and returns access token |
+| `/api/analyze` | `POST` | Form-Data (Binary payload) | Dissects file attributes via ML Classifier |
+| `/api/scans` | `GET` | Headers: Token (Optional) | Pulls localized filtered historic telemetry |
+| `/api/scans` | `DELETE` | Headers: Token | Completely purges scoped historical logs |
+| `/api/health` | `GET` | None | Returns operational health status of backend |
+
+---
+
+## 🗄️ Database Structure
+
+The ecosystem utilizes a relational SQLite layout designed to keep the analytical state clean and responsive:
+
+- **Users Table**: Manages encrypted cryptographic profiles (`id`, `username`, `email`, `password_hash`, `verified`).
+- **Scans Table**: Centralizes real-time audit logs collected from both the manual Web uploader interface and the automatic EDR Background Agent (`id`, `filename`, `time`, `overall_label`, `confidence`, `username`, and ML metadata metrics).
+
+---
+
+## 🛡️ Security Disclaimer
+
+This system is engineered for advanced academic profiling, automated malware identification prototyping, and engineering graduation defense showcases. Execute untested or suspicious payloads exclusively within heavily sandboxed environments (e.g., dedicated VirtualBox instances).
