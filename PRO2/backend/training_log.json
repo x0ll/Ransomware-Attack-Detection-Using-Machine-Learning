@@ -1,0 +1,35 @@
+[
+  {
+    "modelName": "model_20260316_200500.pkl",
+    "dataset": "data_file.csv",
+    "trainedAt": "2026-03-16 20:05:00",
+    "totalRows": 62485,
+    "features": [
+      "FileName",
+      "md5Hash",
+      "Machine",
+      "DebugSize",
+      "DebugRVA",
+      "MajorImageVersion",
+      "MajorOSVersion",
+      "ExportRVA",
+      "ExportSize",
+      "IatVRA",
+      "MajorLinkerVersion",
+      "MinorLinkerVersion",
+      "NumberOfSections",
+      "SizeOfStackReserve",
+      "DllCharacteristics",
+      "ResourceSize",
+      "BitcoinAddresses"
+    ],
+    "nEstimators": 320,
+    "metrics": {
+      "accuracy": 0.9999,
+      "precision": 0.9998,
+      "recall": 1.0,
+      "f1": 0.9999
+    },
+    "folds": 5
+  }
+]

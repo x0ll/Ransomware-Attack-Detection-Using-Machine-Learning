@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── DARK (default) ── */
+:root {
+  --bg:        #0a0e1a;
+  --card:      #0d1117;
+  --border:    #1e2a3a;
+  --text:      #ffffff;
+  --text-muted:#6b7280;
+  --text-sub:  #9ca3af;
+  --hover:     #1e2a3a;
+  --input:     #0a0e1a;
+  --sidebar:   #0d1117;
+}
+
+/* ── LIGHT ── */
+[data-theme="light"] {
+  --bg:        #f0f4f8;
+  --card:      #ffffff;
+  --border:    #e2e8f0;
+  --text:      #0f172a;
+  --text-muted:#64748b;
+  --text-sub:  #475569;
+  --hover:     #f1f5f9;
+  --input:     #f8fafc;
+  --sidebar:   #ffffff;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Theme utility classes */
+.theme-bg      { background: var(--bg) !important; }
+.theme-card    { background: var(--card) !important; }
+.theme-border  { border-color: var(--border) !important; }
+.theme-text    { color: var(--text) !important; }
+.theme-muted   { color: var(--text-muted) !important; }
+.theme-sub     { color: var(--text-sub) !important; }
+.theme-hover:hover { background: var(--hover) !important; }
+.theme-input   { background: var(--input) !important; }
+.theme-sidebar { background: var(--sidebar) !important; }
