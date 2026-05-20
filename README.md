@@ -1,86 +1,51 @@
 <h1 align="center">🛡️ SARMZ RansomGuard</h1>
 
 <p align="center">
-  <strong>Ransomware Attack Detection Using Machine Learning</strong>
+  <strong>Advanced Ransomware Detection, Real-Time EDR Monitoring & Machine Learning Analytics</strong>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Frontend-React%20%2B%20Vite-blue" alt="Frontend">
   <img src="https://img.shields.io/badge/Backend-Python%20Flask-green" alt="Backend">
+  <img src="https://img.shields.io/badge/EDR%20Agent-Windows%20Monitor-red" alt="EDR Agent">
   <img src="https://img.shields.io/badge/Database-SQLite-lightgrey" alt="Database">
   <img src="https://img.shields.io/badge/Machine%20Learning-Random%20Forest-orange" alt="ML">
 </p>
 
 ## 📖 About The Project
 
-**SARMZ RansomGuard** is an advanced, full-stack application designed to detect and analyze potential ransomware threats using machine learning. It provides a seamless interface for users to upload files, which are then parsed and analyzed against a trained Random Forest model. 
+**SARMZ RansomGuard** is an advanced, full-stack cybersecurity framework designed to detect, analyze, and mitigate potential ransomware threats using Machine Learning behavioral indicators. It provides a dual-layer defense architecture: an interactive responsive web application for explicit file profiling, and a proactive background **EDR (Endpoint Detection and Response) Agent** that continuously monitors the operating environment.
 
-The project features a **React/Vite** frontend with a beautiful, responsive user interface (styled with TailwindCSS) and a robust **Flask** backend that manages data processing, machine learning predictions, database interactions, and secure user authentication.
+The architecture cleanly integrates a responsive **React/Vite** frontend (styled with TailwindCSS) with a multi-threaded **Python Flask** production engine that handles static payload dissection, real-time threat telemetry synchronization, localized SQLite persistence, and secure token-based user workflows.
 
 ---
 
 ## ✨ Key Features
 
-- 🔍 **Intelligent File Analysis**: Upload files to instantly predict and classify ransomware vs. benign data.
-- 📊 **Interactive Dashboard**: View real-time statistics, scan logs, and detailed metrics (Accuracy, Precision, Recall, F1-Score).
-- 🧠 **Dynamic ML Model Training**: Retrain the model on new data directly from the user interface.
-- 🔐 **Secure Authentication**: User registration and login system with Two-Factor Authentication (2FA) and password resets via Email OTP.
-- 🌐 **Bilingual Support**: Built-in support for both English and Arabic languages.
-- ℹ️ **Comprehensive About Section**: Detailed system information and mission statement accessible directly from the login page.
-- 🌙 **Dark/Light Mode**: Beautiful UI that adapts to your preferences.
+- 🔍 **Intelligent Payload Inspection**: Upload binaries to immediately evaluate deep file behaviors and extract threat vectors mapped to a trained Random Forest model.
+- 👁️ **Proactive EDR Agent (`monitor.py`)**: A continuous background sentinel leveraging non-blocking asynchronous event listening to monitor critical OS directories (e.g., Downloads, Desktop) for suspicious executables.
+- 🔔 **Native OS Notifications**: Integrated asynchronous Windows Toast notifications that instantly alert the endpoint user upon blocking high-entropy or untrusted binaries without inducing process lagging.
+- 📊 **Interactive Analytics Dashboard**: Live reporting displaying real-time system metrics, total audited objects, telemetry distribution, and exact classification metrics (Accuracy, Precision, Recall, F1-Score).
+- 🧠 **Dynamic Core Retraining**: Direct access via the administrator dashboard to update, optimize, and retrain the underlying Machine Learning model with new behavioral datasets.
+- 🔐 **Hardened Authentication Workflow**: User management architecture featuring secure registration, JWT token generation, password resets via Email OTP, and full telemetry filtering for `Guest` session states.
+- 🌐 **Bilingual Architecture**: Full localized layout translation supporting both English and Arabic languages seamlessly.
+- 🌙 **Persistent Theme Toggling**: Fluid Dark/Light configuration designed for dynamic operating conditions.
 
 ---
 
 ## 🛠️ Technology Stack
 
 ### Frontend
-- **Framework**: React 18 with Vite
-- **Styling**: Tailwind CSS
-- **Routing**: React Router DOM
-- **State Management**: Zustand / Recoil (custom hooks)
+- **Framework**: React 18 powered by Vite (Production Build ready)
+- **Styling**: Tailwind CSS & Modern Web Icons
+- **State & Routing**: React Router DOM & Clean Custom Reactive Hooks
 
-### Backend
-- **Framework**: Flask (Python)
-- **Machine Learning**: Scikit-Learn (Random Forest Classifier), Pandas, NumPy
-- **Authentication**: JWT, bcrypt, OTP via SMTP Email Server
-- **Database**: SQLite3
-
----
-
-## 🚀 Getting Started
-
-Follow these instructions to get a copy of the project up and running on your local machine.
-
-### Prerequisites
-- Node.js (v18 or higher)
-- Python (3.8 or higher)
-- pip and npm installed
-
-### 1. Clone the repository
-```bash
-git clone https://github.com/x0ll/Ransomware-Attack-Detection-Using-Machine-Learning.git
-cd Ransomware-Attack-Detection-Using-Machine-Learning
-```
-
-### 2. Backend Setup
-Navigate to the backend directory, install dependencies, and start the server. The SQLite database will be created automatically.
-
-```bash
-cd backend
-pip install -r requirements.txt
-python run.py
-```
-> The backend server will start on `http://localhost:5000`
-
-### 3. Frontend Setup
-Open a new terminal window, navigate to the frontend directory, install npm packages, and start the development server.
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-> The frontend application will be available at `http://localhost:5173`
+### Backend & Endpoint Agent
+- **Framework**: Flask (Python Multi-Threaded Core)
+- **Real-Time Monitoring**: Watchdog OS Filesystem Events API
+- **Machine Learning**: Scikit-Learn (Random Forest Classifier Core), Pandas, NumPy
+- **Asynchronous Alerts**: Native WinToaster Notification Engine
+- **Database Layer**: Robust SQLite3 Instance with Unified Session Telemetry Sync
 
 ---
 
@@ -88,51 +53,33 @@ npm run dev
 
 ```text
 SARMZ-RansomGuard/
-├── backend/                         <- Python Flask API
-│   ├── app/                         <- Core logic, endpoints, ML processing
-│   ├── models/                      <- Pre-trained models (.pkl)
-│   ├── datasets/                    <- ML datasets (.csv, .json)
-│   ├── run.py                       <- Backend entry point
-│   └── requirements.txt             <- Python dependencies
+├── backend/                        <- Python Production Ecosystem
+│   ├── app/                        <- Core Engine & Modular Logic
+│   │   ├── models/                 <- Serialized Machine Learning Brains (.pkl)
+│   │   ├── datasets/               <- Validated Behavioral Malware Datasets (.csv)
+│   │   ├── routes.py               <- Secure Restful API Handler
+│   │   └── database.py             <- SQLite Global Initialization & Connection Pools
+│   ├── monitor.py                  <- Proactive Background EDR Agent & Windows Toast Daemon
+│   ├── ransomwareguard.db          <- Local Unified Relational Database
+│   ├── server.py                   <- Main Flask Application Entry Point
+│   └── requirements.txt            <- Python Dependencies & Security Modules
 │
-└── frontend/                        <- React + Vite Application
+└── frontend/                       <- Client Interface Subsystem
     ├── src/
-    │   ├── pages/                   <- UI Views (Dashboard, Login, Settings, etc.)
-    │   ├── components/              <- Reusable UI components
-    │   └── lib/                     <- Store, Theme, Language support
+    │   ├── pages/                  <- UI Views (Dashboard, Telemetry Logs, Security Settings)
+    │   ├── components/             <- Modular Component System (Charts, Dynamic Tables)
+    │   └── lib/                    <- Persistent State, Localization & Theme Stores
     ├── index.html
-    └── package.json                 <- Node.js dependencies
-```
+    └── package.json                <- Node.js Package Manifest
+🚀 Getting StartedEnsure your deployment machine satisfies the configuration environment requirements before initialization.PrerequisitesNode.js: Version 18.0.0 or higherPython: Version 3.11.x recommendedNative Admin Privileges (required for local background directory filesystem auditing)1. Repository Access & DeploymentBashgit clone [https://github.com/x0ll/Ransomware-Attack-Detection-Using-Machine-Learning.git](https://github.com/x0ll/Ransomware-Attack-Detection-Using-Machine-Learning.git)
+cd Ransomware-Attack-Detection-Using-Machine-Learning
+2. Backend & EDR Environment SetupInitialize the backend environment, parse local dependencies, and spin up the microservices. The structural SQLite tables materialize instantly upon execution.Bash# Install dependencies
+pip install -r requirements.txt
 
----
-
-## 🔗 API Reference
-
-Here are the main API endpoints provided by the backend:
-
-| Endpoint | Method | Description |
-| :--- | :--- | :--- |
-| `/api/auth/register` | `POST` | Register a new user |
-| `/api/auth/login` | `POST` | Authenticate user & get token |
-| `/api/analyze` | `POST` | Upload and analyze a file with ML |
-| `/api/scans` | `GET` | Fetch user scan history |
-| `/api/scans` | `DELETE` | Clear scan history |
-| `/api/health` | `GET` | Check API status |
-
----
-
-## 🗄️ Database Structure
-
-The project uses SQLite with two primary tables:
-
-1. **Users Table**: Stores user credentials (`id`, `username`, `email`, `password_hash`, `verified`).
-2. **Scans Table**: Stores analysis history (`id`, `filename`, `time`, `overall_label`, `confidence`, `username`, and ML metrics).
-
----
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/x0ll/Ransomware-Attack-Detection-Using-Machine-Learning/issues).
-
----
-*Developed with ❤️ for Advanced Malware Detection and Security.*
+# Launch the Primary Web API Service
+python server.py
+The API server boots up locally on: http://localhost:50003. Launching the EDR Background AgentTo spin up the continuous endpoint system monitor that safeguards local directories against active ransomware injections:Bashpython monitor.py
+4. Client Web Core InitializationOpen an isolated shell environment to initialize the front-end rendering server.Bashcd frontend
+npm install
+npm run dev
+The web graphical client launches on: http://localhost:5173🔗 API ReferenceSecure routes require valid Authorization bearer tokens. Unauthenticated evaluations fallback gracefully under global Guest flags.EndpointMethodPayload / ContextSystem Action/api/auth/registerPOST{username, email, password}Generates a new secure system profile/api/auth/loginPOST{username, password}Validates profile and returns access token/api/analyzePOSTForm-Data (Binary payload)Dissects file attributes via ML Classifier/api/scansGETHeaders: Token (Optional)Pulls localized filtered historic telemetry/api/scansDELETEHeaders: TokenCompletely purges scoped historical logs/api/healthGETNoneReturns operational health status of backend🗄️ Database StructureThe ecosystem utilizes a relational SQLite layout designed to keep the analytical state clean and responsive:Users Table: Manages encrypted cryptographic profiles (id, username, email, password_hash, verified).Scans Table: Centralizes real-time audit logs collected from both the manual Web uploader interface and the automatic EDR Background Agent (id, filename, time, overall_label, confidence, username, and ML metadata metrics).🛡️ Security DisclaimerThis system is engineered for advanced academic profiling, automated malware identification prototyping, and engineering graduation defense showcases. Execute untested or suspicious payloads exclusively within heavily sandboxed environments (e.g., dedicated VirtualBox instances).
