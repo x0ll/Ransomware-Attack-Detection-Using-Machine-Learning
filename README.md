@@ -311,31 +311,10 @@ All authenticated endpoints require a valid Bearer token in the `Authorization` 
 
 ## 🗄️ Database Schema
 
-```sql
--- Users Table
-CREATE TABLE users (
-  id            INTEGER PRIMARY KEY AUTOINCREMENT,
-  username      TEXT UNIQUE NOT NULL,
-  email         TEXT UNIQUE NOT NULL,
-  password_hash TEXT NOT NULL,
-  verified      BOOLEAN DEFAULT 0,
-  created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Scans Table
-CREATE TABLE scans (
-  id             INTEGER PRIMARY KEY AUTOINCREMENT,
-  filename       TEXT NOT NULL,
-  scan_time      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  overall_label  TEXT NOT NULL,       -- 'Ransomware' | 'Safe'
-  confidence     REAL NOT NULL,       -- 0.0 – 1.0
-  username       TEXT,
-  source         TEXT,               -- 'web_upload' | 'edr_agent'
-  entropy        REAL,
-  pe_sections    INTEGER,
-  api_calls      INTEGER
-);
-```
+<div align="center">
+  <img src="docs/screenshots/db_schema.png" width="70%" alt="Database Schema ERD"/>
+  <br/><sub>RansomGuard DB — Entity Relationship Diagram showing <code>users</code> and <code>scans</code> tables with a 1:N relationship</sub>
+</div>
 
 ---
 
