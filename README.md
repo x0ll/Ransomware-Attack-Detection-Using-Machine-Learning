@@ -17,7 +17,7 @@
 </p>
 
 <p>
-  <img src="https://img.shields.io/badge/ML%20Accuracy-97.4%25-success?style=for-the-badge" alt="Accuracy"/>
+  <img src="https://img.shields.io/badge/ML%20Accuracy-98.9%25-success?style=for-the-badge" alt="Accuracy"/>
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License"/>
   <img src="https://img.shields.io/badge/Version-2.1.4-red?style=for-the-badge" alt="Version"/>
   <img src="https://img.shields.io/badge/Status-Production%20Ready-brightgreen?style=for-the-badge" alt="Status"/>
@@ -37,29 +37,77 @@
 
 ## 📸 System Screenshots
 
+### 🔐 Authentication
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <strong>Login Page</strong><br/><br/>
+      <img src="docs/screenshots/login.png" width="100%" alt="Login Page"/>
+      <br/><em>Secure sign-in with bilingual support (English / Arabic) and dark mode toggle</em>
+    </td>
+    <td align="center" width="50%">
+      <strong>Create Account</strong><br/><br/>
+      <img src="docs/screenshots/register.png" width="100%" alt="Register Page"/>
+      <br/><em>Account registration with email verification and password strength enforcement</em>
+    </td>
+  </tr>
+</table>
+
+### 📊 Core Application
+
 <table>
   <tr>
     <td align="center" width="50%">
       <strong>🖥️ Analytics Dashboard</strong><br/><br/>
       <img src="docs/screenshots/dashboard.png" width="100%" alt="Dashboard"/>
-      <br/><em>Real-time metrics, threat distribution charts, and ML performance indicators</em>
+      <br/><em>Real-time scan metrics, threat distribution charts, system integrity status, and security event log</em>
     </td>
     <td align="center" width="50%">
       <strong>🔬 File Analysis Engine</strong><br/><br/>
       <img src="docs/screenshots/file_analysis.png" width="100%" alt="File Analysis"/>
-      <br/><em>Deep PE inspection with entropy scoring and threat vector radar charts</em>
+      <br/><em>Deep PE binary inspection with entropy scoring, EXE properties, and multi-layer ML model results</em>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
       <strong>🌐 URL Threat Scanner</strong><br/><br/>
       <img src="docs/screenshots/url_scanner.png" width="100%" alt="URL Scanner"/>
-      <br/><em>Real-time URL analysis against 45+ global threat intelligence databases</em>
+      <br/><em>Analyze URLs for phishing and malware threats in real time</em>
     </td>
     <td align="center" width="50%">
-      <strong>👁️ EDR Background Agent</strong><br/><br/>
-      <img src="docs/screenshots/edr_monitor.png" width="100%" alt="EDR Monitor"/>
-      <br/><em>Live OS-level filesystem and process monitoring with instant threat blocking</em>
+      <strong>📋 Scan Logs</strong><br/><br/>
+      <img src="docs/screenshots/scan_logs.png" width="100%" alt="Scan Logs"/>
+      <br/><em>Full historical audit log with color-coded threat status, timestamps, and accuracy scores</em>
+    </td>
+  </tr>
+</table>
+
+### 🚨 Alerts & Settings
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <strong>🔔 Security Alerts</strong><br/><br/>
+      <img src="docs/screenshots/alerts.png" width="100%" alt="Alerts"/>
+      <br/><em>Critical and warning alerts with severity classification and instant threat visibility</em>
+    </td>
+    <td align="center" width="50%">
+      <strong>🔍 Alert Detail View</strong><br/><br/>
+      <img src="docs/screenshots/alert_detail.png" width="100%" alt="Alert Detail"/>
+      <br/><em>Detailed threat intelligence modal with model metrics (Accuracy, Precision, Recall, F1)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <strong>⚙️ Settings Panel</strong><br/><br/>
+      <img src="docs/screenshots/settings.png" width="100%" alt="Settings"/>
+      <br/><em>Language, theme, profile, protection settings, and danger zone for database management</em>
+    </td>
+    <td align="center" width="50%">
+      <strong>📄 PDF Security Report</strong><br/><br/>
+      <img src="docs/screenshots/pdf_report.png" width="100%" alt="PDF Report"/>
+      <br/><em>Auto-generated executive security reports with full threat intelligence profiles and ML diagnostics</em>
     </td>
   </tr>
 </table>
@@ -81,11 +129,11 @@ The system operates on two fronts simultaneously:
 <table>
   <tr>
     <td>🔍 <strong>Intelligent File Inspection</strong></td>
-    <td>Deep binary analysis extracting entropy scores, PE headers, imported APIs, and section metadata, all mapped to a trained Random Forest classifier achieving <strong>97.4% accuracy</strong>.</td>
+    <td>Deep binary analysis extracting entropy scores, PE headers, imported APIs, and section metadata, all mapped to a trained Random Forest classifier achieving <strong>98.9% accuracy</strong>.</td>
   </tr>
   <tr>
     <td>🌐 <strong>URL Threat Intelligence</strong></td>
-    <td>Scan URLs against 45+ global threat databases for phishing, malware droppers, ransomware C2 servers, and domain reputation scoring.</td>
+    <td>Scan URLs for phishing, malware droppers, ransomware C2 servers, and domain reputation scoring in real time.</td>
   </tr>
   <tr>
     <td>👁️ <strong>Proactive EDR Agent</strong></td>
@@ -98,6 +146,10 @@ The system operates on two fronts simultaneously:
   <tr>
     <td>📊 <strong>Interactive Analytics Dashboard</strong></td>
     <td>Live metrics showing total scans, threat distribution, detection rates, and ML performance (Accuracy, Precision, Recall, F1-Score) with beautiful interactive charts.</td>
+  </tr>
+  <tr>
+    <td>📄 <strong>Executive PDF Reports</strong></td>
+    <td>Auto-generated, professionally formatted PDF security reports with full threat intelligence profiles, model diagnostics, and MITRE ATT&CK framework mappings.</td>
   </tr>
   <tr>
     <td>🧠 <strong>Dynamic Model Retraining</strong></td>
@@ -151,7 +203,7 @@ SARMZ-RansomGuard/
 │   │   ├── email_server.py             ─ SMTP email OTP service
 │   │   └── server.py                   ─ Flask app factory & CORS config
 │   ├── models/
-│   │   └── random_forest_model.pkl     ─ Trained ML classifier (97.4% accuracy)
+│   │   └── random_forest_model.pkl     ─ Trained ML classifier (98.9% accuracy)
 │   ├── datasets/                       ─ Behavioral malware training data
 │   ├── monitor.py                      ─ EDR Background Agent & Toast daemon
 │   └── requirements.txt               ─ Python dependency manifest
@@ -165,10 +217,10 @@ SARMZ-RansomGuard/
 
 | Metric | Score |
 |:---|:---:|
-| ✅ Accuracy | **97.4%** |
-| 🎯 Precision | **96.8%** |
-| 🔁 Recall | **97.1%** |
-| ⚖️ F1-Score | **96.9%** |
+| ✅ Accuracy | **98.9%** |
+| 🎯 Precision | **99.0%** |
+| 🔁 Recall | **98.9%** |
+| ⚖️ F1-Score | **98.9%** |
 | 🌲 Algorithm | **Random Forest Classifier** |
 | 📂 Training Samples | **62,000+ labeled binaries** |
 
@@ -350,7 +402,7 @@ CREATE TABLE scans (
 ## 🛡️ Security Disclaimer
 
 > ⚠️ **This system is designed exclusively for academic research, malware behavior profiling, and engineering graduation showcase purposes.**
-> 
+>
 > Always test suspicious or untested executables within a **heavily isolated environment** such as a dedicated VirtualBox/VMware sandbox. Never execute unknown binaries on production or personal machines.
 
 ---
