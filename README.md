@@ -37,81 +37,81 @@
 
 ## 📸 System Screenshots
 
-> A full walkthrough of the **SARMZ RansomGuard** platform — from authentication to threat detection and reporting.
-
----
-
-### 🖥️ Analytics Dashboard
+### 🖥️ Dashboard
 
 <div align="center">
-  <img src="docs/screenshots/dashboard.png" width="90%" alt="Dashboard"/>
-  <br/>
-  <sub>Real-time threat metrics · Scan distribution charts · System integrity status · Live security event log</sub>
-</div>
-
----
-
-### 🔐 Authentication
-
-<div align="center">
-
-| Sign In | Create Account |
-|:---:|:---:|
-| <img src="docs/screenshots/login.png" width="420" alt="Login"/> | <img src="docs/screenshots/register.png" width="420" alt="Register"/> |
-| Bilingual login (EN/AR) with dark mode toggle | Secure registration with email OTP verification |
-
-</div>
-
----
-
-### 🔬 Threat Analysis
-
-<div align="center">
-
-| File Analysis Engine | URL Threat Scanner |
-|:---:|:---:|
-| <img src="docs/screenshots/file_analysis.png" width="420" alt="File Analysis"/> | <img src="docs/screenshots/url_scanner.png" width="420" alt="URL Scanner"/> |
-| Deep PE inspection · Entropy scoring · Multi-layer ML results | Real-time URL analysis for phishing & malware threats |
-
-</div>
-
----
-
-### 🚨 Alerts & Monitoring
-
-<div align="center">
-
-| Security Alerts | Alert Detail View |
-|:---:|:---:|
-| <img src="docs/screenshots/alerts.png" width="420" alt="Alerts"/> | <img src="docs/screenshots/alert_detail.png" width="420" alt="Alert Detail"/> |
-| Critical/Warning alerts with severity classification | Full threat intelligence modal with ML model metrics |
-
-</div>
-
----
-
-### 🗂️ Logs, Settings & Reporting
-
-<div align="center">
-
-| Scan Logs | Settings Panel |
-|:---:|:---:|
-| <img src="docs/screenshots/scan_logs.png" width="420" alt="Scan Logs"/> | <img src="docs/screenshots/settings.png" width="420" alt="Settings"/> |
-| Full audit history with color-coded results & accuracy scores | Language, theme, profile & protection configuration |
-
+  <img src="docs/screenshots/dashboard.png" width="85%" alt="Dashboard"/>
+  <br/><sub>Real-time threat metrics · Scan distribution · System integrity · Live security event log</sub>
 </div>
 
 <br/>
 
+### 🔐 Authentication
+
 <div align="center">
-  <img src="docs/screenshots/pdf_report.png" width="45%" alt="PDF Report"/>
-  <br/>
-  <sub>📄 Auto-generated Executive Security Report — threat intelligence profiles, model diagnostics & MITRE ATT&CK mappings</sub>
+  <table>
+    <tr>
+      <td align="center"><b>Sign In</b><br/><br/><img src="docs/screenshots/login.png" width="100%" alt="Login"/><br/><sub>Bilingual (EN/AR) · Dark mode toggle</sub></td>
+      <td align="center"><b>Create Account</b><br/><br/><img src="docs/screenshots/register.png" width="100%" alt="Register"/><br/><sub>Email OTP verification · Secure registration</sub></td>
+    </tr>
+  </table>
+</div>
+
+<br/>
+
+### 🔬 Threat Analysis
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><b>File Analysis Engine</b><br/><br/><img src="docs/screenshots/file_analysis.png" width="100%" alt="File Analysis"/><br/><sub>PE inspection · Entropy scoring · Multi-layer ML results</sub></td>
+      <td align="center"><b>URL Threat Scanner</b><br/><br/><img src="docs/screenshots/url_scanner.png" width="100%" alt="URL Scanner"/><br/><sub>Real-time URL analysis for phishing & malware</sub></td>
+    </tr>
+  </table>
+</div>
+
+<br/>
+
+### 🚨 Alerts & Monitoring
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><b>Security Alerts</b><br/><br/><img src="docs/screenshots/alerts.png" width="100%" alt="Alerts"/><br/><sub>Critical/Warning classification · Instant visibility</sub></td>
+      <td align="center"><b>Alert Detail View</b><br/><br/><img src="docs/screenshots/alert_detail.png" width="100%" alt="Alert Detail"/><br/><sub>Threat intelligence modal · ML metrics (Accuracy, F1, Recall)</sub></td>
+    </tr>
+  </table>
+</div>
+
+<br/>
+
+### 🗂️ Logs, Settings & Reports
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><b>Scan Logs</b><br/><br/><img src="docs/screenshots/scan_logs.png" width="100%" alt="Scan Logs"/><br/><sub>Full audit history · Color-coded results · Timestamps</sub></td>
+      <td align="center"><b>Settings Panel</b><br/><br/><img src="docs/screenshots/settings.png" width="100%" alt="Settings"/><br/><sub>Language · Theme · Profile · Protection config</sub></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><b>📄 Executive PDF Security Report</b><br/><br/><img src="docs/screenshots/pdf_report.png" width="50%" alt="PDF Report"/><br/><sub>Auto-generated report with threat profiles, model diagnostics & MITRE ATT&amp;CK mappings</sub></td>
+    </tr>
+  </table>
+</div>
+
+---
+
+## 🔄 User Flow Diagram
+
+<div align="center">
+  <img src="docs/screenshots/user_flow.png" width="80%" alt="User Flow Diagram"/>
+  <br/><sub>Complete user journey — from authentication through file/URL analysis, EDR monitoring, alerts, and PDF reporting</sub>
 </div>
 
 ---
 
 ## 🌟 About The Project
+
 
 **SARMZ RansomGuard** is an advanced cybersecurity framework built as a graduation project, combining the power of **Machine Learning** with **real-time Endpoint Detection and Response (EDR)** to provide multi-layered ransomware protection.
 
@@ -374,10 +374,10 @@ CREATE TABLE scans (
 
 <div align="center">
 
-| <img src="https://github.com/x0ll.png" width="80" style="border-radius:50%"/> | <img src="https://github.com/Samal3.png" width="80" style="border-radius:50%"/> |
+| <img src="https://github.com/x0ll.png" width="80" style="border-radius:50%"/> | <img src="https://github.com/JAxTeller8.png" width="80" style="border-radius:50%"/> |
 |:---:|:---:|
 | **Saud Al-Asmari** | **Abdulrahman Alfaifi** |
-| [![GitHub](https://img.shields.io/badge/GitHub-x0ll-181717?style=flat-square&logo=github)](https://github.com/x0ll) | [![GitHub](https://img.shields.io/badge/GitHub-Samal3-181717?style=flat-square&logo=github)](https://github.com/Samal3) |
+| [![GitHub](https://img.shields.io/badge/GitHub-x0ll-181717?style=flat-square&logo=github)](https://github.com/x0ll) | [![GitHub](https://img.shields.io/badge/GitHub-JAxTeller8-181717?style=flat-square&logo=github)](https://github.com/JAxTeller8) |
 
 </div>
 
