@@ -37,80 +37,77 @@
 
 ## 📸 System Screenshots
 
+> A full walkthrough of the **SARMZ RansomGuard** platform — from authentication to threat detection and reporting.
+
+---
+
+### 🖥️ Analytics Dashboard
+
+<div align="center">
+  <img src="docs/screenshots/dashboard.png" width="90%" alt="Dashboard"/>
+  <br/>
+  <sub>Real-time threat metrics · Scan distribution charts · System integrity status · Live security event log</sub>
+</div>
+
+---
+
 ### 🔐 Authentication
 
-<table>
-  <tr>
-    <td align="center" width="50%">
-      <strong>Login Page</strong><br/><br/>
-      <img src="docs/screenshots/login.png" width="100%" alt="Login Page"/>
-      <br/><em>Secure sign-in with bilingual support (English / Arabic) and dark mode toggle</em>
-    </td>
-    <td align="center" width="50%">
-      <strong>Create Account</strong><br/><br/>
-      <img src="docs/screenshots/register.png" width="100%" alt="Register Page"/>
-      <br/><em>Account registration with email verification and password strength enforcement</em>
-    </td>
-  </tr>
-</table>
+<div align="center">
 
-### 📊 Core Application
+| Sign In | Create Account |
+|:---:|:---:|
+| <img src="docs/screenshots/login.png" width="420" alt="Login"/> | <img src="docs/screenshots/register.png" width="420" alt="Register"/> |
+| Bilingual login (EN/AR) with dark mode toggle | Secure registration with email OTP verification |
 
-<table>
-  <tr>
-    <td align="center" width="50%">
-      <strong>🖥️ Analytics Dashboard</strong><br/><br/>
-      <img src="docs/screenshots/dashboard.png" width="100%" alt="Dashboard"/>
-      <br/><em>Real-time scan metrics, threat distribution charts, system integrity status, and security event log</em>
-    </td>
-    <td align="center" width="50%">
-      <strong>🔬 File Analysis Engine</strong><br/><br/>
-      <img src="docs/screenshots/file_analysis.png" width="100%" alt="File Analysis"/>
-      <br/><em>Deep PE binary inspection with entropy scoring, EXE properties, and multi-layer ML model results</em>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="50%">
-      <strong>🌐 URL Threat Scanner</strong><br/><br/>
-      <img src="docs/screenshots/url_scanner.png" width="100%" alt="URL Scanner"/>
-      <br/><em>Analyze URLs for phishing and malware threats in real time</em>
-    </td>
-    <td align="center" width="50%">
-      <strong>📋 Scan Logs</strong><br/><br/>
-      <img src="docs/screenshots/scan_logs.png" width="100%" alt="Scan Logs"/>
-      <br/><em>Full historical audit log with color-coded threat status, timestamps, and accuracy scores</em>
-    </td>
-  </tr>
-</table>
+</div>
 
-### 🚨 Alerts & Settings
+---
 
-<table>
-  <tr>
-    <td align="center" width="50%">
-      <strong>🔔 Security Alerts</strong><br/><br/>
-      <img src="docs/screenshots/alerts.png" width="100%" alt="Alerts"/>
-      <br/><em>Critical and warning alerts with severity classification and instant threat visibility</em>
-    </td>
-    <td align="center" width="50%">
-      <strong>🔍 Alert Detail View</strong><br/><br/>
-      <img src="docs/screenshots/alert_detail.png" width="100%" alt="Alert Detail"/>
-      <br/><em>Detailed threat intelligence modal with model metrics (Accuracy, Precision, Recall, F1)</em>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="50%">
-      <strong>⚙️ Settings Panel</strong><br/><br/>
-      <img src="docs/screenshots/settings.png" width="100%" alt="Settings"/>
-      <br/><em>Language, theme, profile, protection settings, and danger zone for database management</em>
-    </td>
-    <td align="center" width="50%">
-      <strong>📄 PDF Security Report</strong><br/><br/>
-      <img src="docs/screenshots/pdf_report.png" width="100%" alt="PDF Report"/>
-      <br/><em>Auto-generated executive security reports with full threat intelligence profiles and ML diagnostics</em>
-    </td>
-  </tr>
-</table>
+### 🔬 Threat Analysis
+
+<div align="center">
+
+| File Analysis Engine | URL Threat Scanner |
+|:---:|:---:|
+| <img src="docs/screenshots/file_analysis.png" width="420" alt="File Analysis"/> | <img src="docs/screenshots/url_scanner.png" width="420" alt="URL Scanner"/> |
+| Deep PE inspection · Entropy scoring · Multi-layer ML results | Real-time URL analysis for phishing & malware threats |
+
+</div>
+
+---
+
+### 🚨 Alerts & Monitoring
+
+<div align="center">
+
+| Security Alerts | Alert Detail View |
+|:---:|:---:|
+| <img src="docs/screenshots/alerts.png" width="420" alt="Alerts"/> | <img src="docs/screenshots/alert_detail.png" width="420" alt="Alert Detail"/> |
+| Critical/Warning alerts with severity classification | Full threat intelligence modal with ML model metrics |
+
+</div>
+
+---
+
+### 🗂️ Logs, Settings & Reporting
+
+<div align="center">
+
+| Scan Logs | Settings Panel |
+|:---:|:---:|
+| <img src="docs/screenshots/scan_logs.png" width="420" alt="Scan Logs"/> | <img src="docs/screenshots/settings.png" width="420" alt="Settings"/> |
+| Full audit history with color-coded results & accuracy scores | Language, theme, profile & protection configuration |
+
+</div>
+
+<br/>
+
+<div align="center">
+  <img src="docs/screenshots/pdf_report.png" width="45%" alt="PDF Report"/>
+  <br/>
+  <sub>📄 Auto-generated Executive Security Report — threat intelligence profiles, model diagnostics & MITRE ATT&CK mappings</sub>
+</div>
 
 ---
 
