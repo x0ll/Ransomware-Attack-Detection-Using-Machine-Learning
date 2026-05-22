@@ -263,20 +263,7 @@ cp .env.example .env
 # Edit .env with your credentials
 ```
 
-### 3️⃣ Configure Environment Variables
-
-Create `backend/.env`:
-```env
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_app_password_here
-```
-
-Create `frontend/.env`:
-```env
-VITE_API_URL=http://127.0.0.1:5000
-```
-
-### 4️⃣ Launch the Backend API
+### 3️⃣ Launch the Backend API
 
 ```bash
 cd backend
@@ -284,7 +271,7 @@ python run.py
 ```
 > 🟢 API server starts on: `http://localhost:5000`
 
-### 5️⃣ Launch the EDR Background Agent
+### 4️⃣ Launch the EDR Background Agent
 
 Open a separate terminal and run the background monitor:
 
@@ -294,7 +281,7 @@ python monitor.py
 ```
 > 🛡️ The agent silently monitors your system directories for ransomware activity.
 
-### 6️⃣ Launch the Frontend
+### 5️⃣ Launch the Frontend
 
 ```bash
 cd frontend
