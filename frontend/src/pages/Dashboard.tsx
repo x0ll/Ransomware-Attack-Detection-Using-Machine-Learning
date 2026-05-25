@@ -24,7 +24,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const currentUser = localStorage.getItem('rg_current_user') || undefined
-    let wakeUpTimer: NodeJS.Timeout
+    let wakeUpTimer: any
 
     const update = async () => {
       setLoading(true)

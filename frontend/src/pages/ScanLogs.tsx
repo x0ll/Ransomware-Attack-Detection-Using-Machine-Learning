@@ -17,7 +17,7 @@ export default function ScanLogs() {
   useEffect(() => {
     // Retrieve the current user's session to load only their scan records
     const currentUser = localStorage.getItem('rg_current_user') || undefined
-    let wakeUpTimer: NodeJS.Timeout
+    let wakeUpTimer: any
 
     const update = async () => {
       setLoading(true)
