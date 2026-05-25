@@ -1102,13 +1102,13 @@ export default function FileAnalysis() {
                     <div className="bg-green-500 h-1.5 rounded-full" style={{ width: v + '%' }} />
                   </div>
                 </div>
+                );
               ))}
             </div>
             <p className={`text-[10px] text-center ${muted} italic font-medium opacity-70`}>
-              * Metrics based on validation dataset (N=62,485) — Independent from current scan result
+              {isAr ? '* المقاييس تستند إلى مجموعة البيانات التحققية (N=62,485) – مستقلة عن نتيجة الفحص الحالية' : '* Metrics based on validation dataset (N=62,485) – Independent from current scan result'}
             </p>
           </div>
-
 
 
           {/* ── Analysis Details Toggle (advanced tab view) ── */}
