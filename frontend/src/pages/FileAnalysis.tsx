@@ -957,7 +957,15 @@ export default function FileAnalysis() {
             <div className="grid grid-cols-2 divide-x divide-y"
               style={{ borderColor: isLight ? '#f1f5f9' : '#1e2a3a' }}>
 
-              {/*              </div> italic select-none">
+              {/* Feature rows — left column */}
+              <div className="p-4 space-y-3">
+                {/* Overall Entropy */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className={`text-xs ${muted} flex items-center gap-1.5`}><BarChart2 className="w-3.5 h-3.5 text-blue-400" /> {T('entropy')}</span>
+                    <span className={`text-sm font-bold ${result.entropy >= 6.5 ? 'text-red-400' : 'text-green-400'}`}>
+                      {result.entropy > 0 ? result.entropy.toFixed(3) : (
+                        <span className="text-[10px] text-gray-500 font-normal italic select-none">
                           {isAr ? 'غير متوفر' : 'Not Applicable'}
                         </span>
                       )}
@@ -1102,7 +1110,6 @@ export default function FileAnalysis() {
                     <div className="bg-green-500 h-1.5 rounded-full" style={{ width: v + '%' }} />
                   </div>
                 </div>
-                );
               ))}
             </div>
             <p className={`text-[10px] text-center ${muted} italic font-medium opacity-70`}>
