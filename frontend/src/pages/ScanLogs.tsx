@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { fetchScans, ScanResult } from '../lib/store'
 import { getLang, t } from '../lib/language'
-import { ScrollText, CheckCircle, XCircle, Search } from 'lucide-react'
+import { ScrollText, CheckCircle, XCircle, Search, Loader2 } from 'lucide-react'
 import { getTheme, Theme } from '../lib/theme'
 
 export default function ScanLogs() {
   const [scans, setScans]   = useState<ScanResult[]>([])
+  const [loading, setLoading] = useState(true)
+  const [isWakingUp, setIsWakingUp] = useState(false)
   const [search, setSearch] = useState('')
   const [lang,  setLang]  = useState(getLang())
   const [theme, setTheme] = useState<Theme>(getTheme())
@@ -15,10 +17,28 @@ export default function ScanLogs() {
   useEffect(() => {
     // Retrieve the current user's session to load only their scan records
     const currentUser = localStorage.getItem('rg_current_user') || undefined
+    let wakeUpTimer: NodeJS.Timeout
 
     const update = async () => {
-      setScans(await fetchScans(currentUser))
-      setLang(getLang())
+      setLoading(true)
+      setIsWakingUp(false)
+      
+      // Start a timer. If API doesn't respond in 2.5s, it is likely a Render cold start.
+      wakeUpTimer = setTimeout(() => {
+        setIsWakingUp(true)
+      }, 2500)
+
+      try {
+        const data = await fetchScans(currentUser)
+        setScans(data)
+      } catch (err) {
+        console.error(err)
+      } finally {
+        clearTimeout(wakeUpTimer)
+        setIsWakingUp(false)
+        setLoading(false)
+        setLang(getLang())
+      }
     }
 
     // Load scans on mount and re-fetch whenever a new scan is completed
@@ -27,6 +47,7 @@ export default function ScanLogs() {
     window.addEventListener("lang-changed",  () => setLang(getLang()))
     window.addEventListener("theme-changed", () => setTheme(getTheme()))
     return () => {
+      clearTimeout(wakeUpTimer)
       window.removeEventListener("scans-updated", update)
       window.removeEventListener("lang-changed",  () => setLang(getLang()))
       window.removeEventListener("theme-changed", () => setTheme(getTheme()))
@@ -65,7 +86,37 @@ export default function ScanLogs() {
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="animate-pulse space-y-4">
+          {isWakingUp && (
+            <div className="flex items-center gap-3 p-4 rounded-xl border border-yellow-500/30 bg-yellow-500/10 text-yellow-500 text-xs">
+              <Loader2 className="w-4 h-4 animate-spin flex-shrink-0" />
+              <div>
+                <p className="font-bold">{isAr ? '☕ جاري تشغيل خادم الخدمة السحابية...' : '☕ Waking up the cloud server...'}</p>
+                <p className="opacity-80 mt-0.5">
+                  {isAr 
+                    ? 'بسبب الاستضافة المجانية على Render، قد يستغرق الخادم حوالي 50 ثانية للاستيقاظ بعد فترة من الخمول. شكراً لانتظارك!'
+                    : 'Since the API is hosted on Render\'s free tier, the server takes ~50 seconds to wake up. Thank you for your patience!'}
+                </p>
+              </div>
+            </div>
+          )}
+          <div className={`${card} border rounded-xl p-4 space-y-3`}>
+            <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/4" />
+              <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/4" />
+              <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/6" />
+            </div>
+            {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} className="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800/50 last:border-0">
+                <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/3" />
+                <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/4" />
+                <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded w-20" />
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 text-center">
           <ScrollText className={`w-12 h-12 mb-3 ${isLight ? "text-slate-300" : "text-gray-600"}`}/>
           <p className={`text-lg font-bold mb-1 ${txt}`}>{T('noLogs')}</p>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <!-- High-end neon glow effect -->
+    <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.8" result="blur" />
+      <feFlood flood-color="#22c55e" flood-opacity="0.9" result="color" />
+      <feComposite in="color" in2="blur" operator="in" result="glow" />
+      <feMerge>
+        <feMergeNode in="glow" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Glowing Green Shield Base -->
+  <path d="M16 4 L26 8 V15.5 C26 21.5 22 26.5 16 29 C10 26.5 6 21.5 6 15.5 V8 Z" 
+        fill="#0b0f19" 
+        stroke="#22c55e" 
+        stroke-width="2" 
+        filter="url(#neon-glow)" />
+        
+  <!-- Glowing Green Shield Inner Grid/Detail -->
+  <path d="M16 7 L23 10.2 V15.5 C23 20 20 23.8 16 25.8 C12 23.8 9 20 9 15.5 V10.2 Z" 
+        fill="#10b981" 
+        fill-opacity="0.15"
+        stroke="#10b981" 
+        stroke-width="1" />
+
+  <!-- Inner glowing checkmark representing 'Guard' -->
+  <path d="M12 15.5 L14.8 18.3 L20 13" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="2.5" 
+        stroke-linecap="round" 
+        stroke-linejoin="round" 
+        filter="url(#neon-glow)" />
+</svg>
