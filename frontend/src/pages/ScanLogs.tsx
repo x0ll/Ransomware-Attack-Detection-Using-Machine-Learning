@@ -72,37 +72,44 @@ export default function ScanLogs() {
         </div>
       ) : (
         <div className={`${card} border rounded-xl overflow-x-auto transition-colors no-scrollbar`}>
-          <table className="w-full min-w-[600px]">
+          <table className="w-full">
             <thead>
               <tr className={`border-b ${isLight ? "border-slate-200" : "border-[#1e2a3a]"}`}>
-                {[T('filename'), T('time'), T('result'), T('rows'), T('accuracy')].map(h => (
+                {[T('filename'), T('time'), T('result')].map(h => (
                   <th key={h} className={`text-left text-xs px-4 py-3 font-medium ${hdr}`}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {filtered.map(s => (
-                <tr key={s.id} className={`border-b last:border-0 transition-colors ${row}`}>
-                  <td className="px-4 py-3">
-                    <span className={`text-xs truncate max-w-[200px] block ${isLight ? "text-slate-700" : "text-gray-300"}`}>{s.filename}</span>
-                  </td>
-                  <td className={`px-4 py-3 text-xs ${muted}`}>{s.time}</td>
-                  <td className="px-4 py-3">
-                    {/* Color-coded badge based on the classification result */}
-                    <span className={`flex items-center gap-1 text-xs font-medium w-fit px-2 py-0.5 rounded
-                      ${s.overallLabel === 'Ransomware' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
-                      {s.overallLabel === 'Ransomware'
-                        ? <><XCircle className="w-3 h-3"/>{T('ransomwareDetected')}</>
-                        : <><CheckCircle className="w-3 h-3"/>{T('safeFiles')}</>}
-                    </span>
-                  </td>
-                  <td className={`px-4 py-3 text-xs ${muted}`}>{s.totalRows?.toLocaleString()}</td>
-                  {/* Display accuracy as percentage; fall back to N/A if not available */}
-                  <td className="px-4 py-3 text-green-500 text-xs font-medium">
-                    {s.metrics?.accuracy ? (s.metrics.accuracy * 100).toFixed(1) + '%' : 'N/A'}
-                  </td>
-                </tr>
-              ))}
+              {filtered.map(s => {
+                const isRansomware = s.overallLabel === 'Ransomware';
+                return (
+                  <tr 
+                    key={s.id} 
+                    className={`border-b last:border-0 transition-all ${row} ${
+                      isRansomware 
+                        ? (isLight ? 'bg-red-50/60 border-l-4 border-l-red-500' : 'bg-red-950/15 border-l-4 border-l-red-500 shadow-[inset_4px_0_8px_rgba(239,68,68,0.15)]') 
+                        : ''
+                    }`}
+                  >
+                    <td className="px-4 py-3">
+                      <span className={`text-xs truncate max-w-[280px] block ${isLight ? "text-slate-700" : "text-gray-300"}`}>{s.filename}</span>
+                    </td>
+                    <td className={`px-4 py-3 text-xs ${muted}`}>{s.time}</td>
+                    <td className="px-4 py-3">
+                      {/* Color-coded badge based on the classification result */}
+                      <span className={`flex items-center gap-1 text-[10px] font-bold w-fit px-2 py-0.5 rounded-lg border
+                        ${isRansomware 
+                          ? 'bg-red-500/10 border-red-500/20 text-red-400' 
+                          : 'bg-green-500/10 border-green-500/20 text-green-400'}`}>
+                        {isRansomware
+                          ? <><XCircle className="w-3 h-3"/>{T('ransomwareDetected')}</>
+                          : <><CheckCircle className="w-3 h-3"/>{T('safeFiles')}</>}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

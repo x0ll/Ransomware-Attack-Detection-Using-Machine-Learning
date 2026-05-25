@@ -7,7 +7,7 @@ import {
   Cpu, Shield, AlertCircle, ChevronDown, ChevronUp,
   Layers, Activity, Search, Link2, BarChart2,
   Box, Zap, Folder, MapPin, ArrowDownToLine, Lock, ShieldCheck,
-  Package, LayoutGrid, FileText, Lightbulb
+  Package, LayoutGrid, FileText, Lightbulb, Info
 } from 'lucide-react'
 import { getTheme, Theme } from '../lib/theme'
 import { PieChart, Pie, Cell } from 'recharts'
@@ -30,7 +30,7 @@ function RiskMeter({ score, lang, isLight }: { score: number; lang: string; isLi
         <Shield className="w-4 h-4" style={{ color }} />{T('riskScore')}
       </h3>
       <div className="flex items-center gap-4">
-        <div className="relative w-24 h-24">
+        <div className="relative w-24 h-24 filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.45)] dark:drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)] transition-all">
           <svg viewBox="0 0 36 36" className="w-24 h-24 -rotate-90">
             <circle cx="18" cy="18" r="15.9" fill="none" stroke={track} strokeWidth="3" />
             <circle cx="18" cy="18" r="15.9" fill="none" stroke={color} strokeWidth="3"
@@ -167,9 +167,14 @@ function AnalysisDetails({ result, lang, isLight, isRansomware }: {
           <button key={id} onClick={() => setTab(id)}
             className={`flex items-center gap-1.5 px-4 py-3 text-xs font-semibold whitespace-nowrap transition-all border-b-2
               ${tab === id
-                ? `border-red-500 text-red-400 ${isLight ? 'bg-red-50' : 'bg-red-500/5'}`
+                ? isLight
+                  ? 'border-green-500 text-green-600 bg-green-50 font-bold'
+                  : 'border-green-400 text-green-400 bg-green-500/10 shadow-[0_0_12px_rgba(34,197,94,0.15)] font-bold'
                 : `border-transparent ${muted} ${isLight ? 'hover:bg-slate-50' : 'hover:bg-[#131b27]'}`}`}>
-            <Icon className="w-3.5 h-3.5" />{label}
+            <Icon className={`w-3.5 h-3.5 ${tab === id ? 'text-green-400 filter drop-shadow-[0_0_3px_#22c55e]' : ''}`} />
+            <span className={tab === id && !isLight ? 'filter drop-shadow-[0_0_4px_rgba(74,222,128,0.55)] text-green-300' : ''}>
+              {label}
+            </span>
           </button>
         ))}
       </div>
@@ -191,9 +196,13 @@ function AnalysisDetails({ result, lang, isLight, isRansomware }: {
               <div className="col-span-5">{T('layerStatus')}</div>
               <div className="col-span-2 text-center">{T('layerScore')}</div>
             </div>
-            {layers.map((layer) => (
+            {layers.map((layer, index) => (
               <div key={layer.key}
-                className={`flex flex-col md:grid md:grid-cols-12 gap-2 items-center px-3 py-2.5 rounded-lg transition-all ${rowBg}`}>
+                className={`flex flex-col md:grid md:grid-cols-12 gap-2 items-center px-3 py-2.5 rounded-lg transition-all ${rowBg} ${
+                  index % 2 === 0
+                    ? isLight ? 'bg-slate-50/50' : 'bg-[#101724]/40'
+                    : 'bg-transparent'
+                }`}>
                 <div className="hidden md:flex md:col-span-1 text-base items-center justify-center text-slate-400">{layer.icon}</div>
                 <div className="flex items-center justify-between md:col-span-4 w-full">
                   <div className={`text-xs font-semibold ${txt} flex items-center gap-2`}>
@@ -271,7 +280,11 @@ function AnalysisDetails({ result, lang, isLight, isRansomware }: {
                     : T('normalEntropy')
                   return (
                     <div key={idx}
-                      className={`flex flex-col md:grid md:grid-cols-12 gap-2 items-center px-3 py-2 rounded-lg ${rowBg} transition-all`}>
+                      className={`flex flex-col md:grid md:grid-cols-12 gap-2 items-center px-3 py-2 rounded-lg ${rowBg} transition-all ${
+                        idx % 2 === 0
+                          ? isLight ? 'bg-slate-50/50' : 'bg-[#101724]/40'
+                          : 'bg-transparent'
+                      }`}>
                       <div className="flex items-center justify-between w-full md:col-span-2">
                         <div className={`font-mono text-xs font-bold ${txt}`}>{sec.name}</div>
                         <div className="md:hidden">
@@ -341,10 +354,13 @@ function AnalysisDetails({ result, lang, isLight, isRansomware }: {
                   <div className="col-span-2 text-center">{T('layerScore')}</div>
                   <div className="col-span-1 text-center">{isAr ? 'حالة' : 'Status'}</div>
                 </div>
-                {yaraRules.map((rule: any) => (
+                {yaraRules.map((rule: any, idx: number) => (
                   <div key={rule.id}
                     className={`flex flex-col md:grid md:grid-cols-12 gap-2 items-center px-3 py-2.5 rounded-lg transition-all ${rowBg}
-                      ${rule.matched ? (isLight ? 'bg-red-50' : 'bg-red-500/5') : ''}`}>
+                      ${rule.matched 
+                        ? (isLight ? 'bg-red-50' : 'bg-red-500/8') 
+                        : (idx % 2 === 0 ? (isLight ? 'bg-slate-50/50' : 'bg-[#101724]/40') : 'bg-transparent')
+                      }`}>
                     <div className="flex items-center justify-between w-full md:col-span-3">
                       <div className={`text-xs font-semibold ${rule.matched ? 'text-red-400' : txt}`}>
                         {isAr ? rule.name_ar : rule.name}
@@ -718,13 +734,30 @@ export default function FileAnalysis() {
                 <AlertCircle className="w-4 h-4 text-yellow-400" />{T('detectionReasons')}
               </h3>
               <div className="space-y-2 max-h-40 overflow-y-auto">
-                {(result.detectionReasons || ['No data']).map((r: string, i: number) => (
-                  <div key={i} className={`flex items-start gap-2 text-xs p-2 rounded-lg
-                    ${isRansomware ? 'bg-red-500/10 text-red-300' : 'bg-green-500/10 text-green-300'}`}>
-                    <span className="mt-0.5 flex-shrink-0">{isRansomware ? <AlertTriangle className="w-3 h-3" /> : <CheckCircle className="w-3 h-3" />}</span>
-                    <span className="mt-[2px]">{r}</span>
-                  </div>
-                ))}
+                {(result.detectionReasons || ['No data']).map((r: string, i: number) => {
+                  const rt = r.toLowerCase();
+                  let reasonIcon = isRansomware ? <AlertTriangle className="w-3.5 h-3.5 text-red-400" /> : <CheckCircle className="w-3.5 h-3.5 text-green-400" />;
+                  
+                  if (rt.includes('entropy') || rt.includes('إنتروبيا') || rt.includes('pack') || rt.includes('compress')) {
+                    reasonIcon = <BarChart2 className="w-3.5 h-3.5 text-amber-400" />;
+                  } else if (rt.includes('api') || rt.includes('chain') || rt.includes('سلاسل') || rt.includes('call')) {
+                    reasonIcon = <Link2 className="w-3.5 h-3.5 text-fuchsia-400" />;
+                  } else if (rt.includes('yara') || rt.includes('rule') || rt.includes('قاعدة') || rt.includes('match') || rt.includes('تطابق')) {
+                    reasonIcon = <Shield className="w-3.5 h-3.5 text-red-400" />;
+                  } else if (rt.includes('encrypt') || rt.includes('lock') || rt.includes('تشفير') || rt.includes('قفل')) {
+                    reasonIcon = <Lock className="w-3.5 h-3.5 text-cyan-400" />;
+                  } else if (rt.includes('signature') || rt.includes('توقيع')) {
+                    reasonIcon = <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />;
+                  }
+
+                  return (
+                    <div key={i} className={`flex items-start gap-2 text-xs p-2 rounded-lg
+                      ${isRansomware ? 'bg-red-500/10 text-red-300' : 'bg-green-500/10 text-green-300'}`}>
+                      <span className="mt-0.5 flex-shrink-0">{reasonIcon}</span>
+                      <span className="mt-[2px]">{r}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -734,11 +767,13 @@ export default function FileAnalysis() {
             <div className={`${card} border rounded-xl p-4`}>
               <h3 className={`text-sm font-semibold mb-3 ${txt}`}>{T('classification')}</h3>
               <div className="flex items-center justify-center gap-6">
-                <PieChart width={120} height={120}>
-                  <Pie data={pieData} cx={55} cy={55} innerRadius={35} outerRadius={55} dataKey="value" strokeWidth={0}>
-                    {pieData.map((e, i) => <Cell key={i} fill={e.color} />)}
-                  </Pie>
-                </PieChart>
+                <div className="filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.45)] dark:drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)] transition-all">
+                  <PieChart width={120} height={120}>
+                    <Pie data={pieData} cx={55} cy={55} innerRadius={35} outerRadius={55} dataKey="value" strokeWidth={0}>
+                      {pieData.map((e, i) => <Cell key={i} fill={e.color} />)}
+                    </Pie>
+                  </PieChart>
+                </div>
                 <div className="space-y-2">
                   {pieData.map(d => (
                     <div key={d.name} className="flex items-center gap-2">
@@ -764,16 +799,23 @@ export default function FileAnalysis() {
                   { l: T('signature'), v: result.signatureMatch ? result.signatureFamily : (isAr ? 'سليم' : 'Clean'), isSig: true },
                   { l: T('savedTo'),   v: 'SQLite Database' },
                 ].map(({ l, v, isSig }) => (
-                  <div key={l} className={`flex justify-between text-[11px] border-b pb-1.5
+                  <div key={l} className={`flex justify-between items-center text-[11px] border-b pb-1.5
                     ${isLight ? 'border-slate-200' : 'border-[#1e2a3a]'}`}>
                     <span className={muted}>{l}</span>
                     <span className={`font-medium flex items-center gap-1.5 ${
                       isSig && result.signatureMatch ? 'text-red-400'
                       : isSig && !result.signatureMatch ? 'text-green-500'
                       : sub}`}>
-                      {isSig && result.signatureMatch && <AlertTriangle className="w-3 h-3"/>}
-                      {isSig && !result.signatureMatch && <CheckCircle className="w-3 h-3"/>}
-                      {v}
+                      {isSig && !result.signatureMatch ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-green-500/20 text-green-400 border border-green-500/30 shadow-[0_0_12px_rgba(34,197,94,0.3)] text-[9px] font-black tracking-wide uppercase select-none animate-pulse">
+                          [ 🛡️ SARMZ VERIFIED ]
+                        </span>
+                      ) : (
+                        <>
+                          {isSig && result.signatureMatch && <AlertTriangle className="w-3 h-3"/>}
+                          {v}
+                        </>
+                      )}
                     </span>
                   </div>
                 ))}
@@ -860,7 +902,7 @@ export default function FileAnalysis() {
                   ? (layer.score >= 30 ? '#ef4444' : '#f59e0b')
                   : '#22c55e'
                 return (
-                  <div key={layer.label} className={`p-4 flex flex-col gap-2 ${isLight ? 'hover:bg-slate-50' : 'hover:bg-[#0d1624]'} transition-all`}>
+                  <div key={layer.label} className={`p-4 flex flex-col gap-2 ${isLight ? 'bg-slate-50/60 hover:bg-slate-50' : 'bg-[#121824] hover:bg-[#182030]'} transition-all`}>
                     <div className="flex items-center gap-1.5 mb-1">
                       <span className="mt-0.5">{layer.icon}</span>
                       <span className={`text-[11px] font-bold ${txt} mt-0.5`}>{layer.label}</span>
@@ -915,28 +957,10 @@ export default function FileAnalysis() {
             <div className="grid grid-cols-2 divide-x divide-y"
               style={{ borderColor: isLight ? '#f1f5f9' : '#1e2a3a' }}>
 
-              {/* Feature rows — left column */}
-              <div className="p-4 space-y-3">
-                {/* File Size */}
-                <div className="flex items-center justify-between">
-                  <span className={`text-xs ${muted} flex items-center gap-1.5`}><Folder className="w-3.5 h-3.5 text-blue-400" /> {isAr ? 'حجم الملف' : 'File Size'}</span>
-                  <span className={`text-sm font-bold ${txt}`}>
-                    {result.fileSize > 1048576
-                      ? `${(result.fileSize / 1048576).toFixed(2)} MB`
-                      : `${(result.fileSize / 1024).toFixed(1)} KB`}
-                  </span>
-                </div>
-                {/* Full Entropy */}
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className={`text-xs ${muted} flex items-center gap-1.5`}>
-                      <BarChart2 className="w-3.5 h-3.5 text-purple-400" /> {isAr ? 'الإنتروبيا الكلية' : 'Full Entropy'}
-                    </span>
-                    <span className={`text-sm font-bold font-mono ${
-                      result.entropy >= 7.5 ? 'text-red-400'
-                      : result.entropy >= 6.5 ? 'text-yellow-400'
-                      : 'text-green-400'}`}>
-                      {result.entropy > 0 ? result.entropy : 'N/A'} / 8.0
+              {/*              </div> italic select-none">
+                          {isAr ? 'غير متوفر' : 'Not Applicable'}
+                        </span>
+                      )}
                     </span>
                   </div>
                   {result.entropy > 0 && (
@@ -948,25 +972,39 @@ export default function FileAnalysis() {
                     </div>
                   )}
                   <p className={`text-[10px] mt-1.5 ${muted} flex items-center gap-1`}>
-                    {result.entropy >= 7.5
-                      ? <><AlertTriangle className="w-3 h-3 text-red-500"/> {isAr ? 'محتوى مضغوط أو مشفر بشكل كبير' : 'Heavily packed or encrypted content'}</>
-                      : result.entropy >= 6.5
-                      ? <><AlertTriangle className="w-3 h-3 text-yellow-500"/> {isAr ? 'إنتروبيا مرتفعة — مشبوه' : 'Elevated — suspicious'}</>
-                      : <><CheckCircle className="w-3 h-3 text-green-500"/> {isAr ? 'إنتروبيا طبيعية' : 'Normal entropy'}</>}
+                    {result.entropy > 0 ? (
+                      result.entropy >= 7.5
+                        ? <><AlertTriangle className="w-3 h-3 text-red-500"/> {isAr ? 'محتوى مضغوط أو مشفر بشكل كبير' : 'Heavily packed or encrypted content'}</>
+                        : result.entropy >= 6.5
+                        ? <><AlertTriangle className="w-3 h-3 text-yellow-500"/> {isAr ? 'إنتروبيا مرتفعة — مشبوه' : 'Elevated — suspicious'}</>
+                        : <><CheckCircle className="w-3 h-3 text-green-500"/> {isAr ? 'إنتروبيا طبيعية' : 'Normal entropy'}</>
+                    ) : (
+                      <span className="text-[9px] text-gray-500 italic select-none">
+                        {isAr ? '* تم تخطي حساب الإنتروبيا لصغر حجم الملف' : '* Entropy calculation bypassed due to small file size'}
+                      </span>
+                    )}
                   </p>
                 </div>
                 {/* Header Entropy */}
                 <div className="flex items-center justify-between">
                   <span className={`text-xs ${muted} flex items-center gap-1.5`}><MapPin className="w-3.5 h-3.5 text-orange-400" /> {isAr ? 'إنتروبيا الترويسة' : 'Header Entropy'}</span>
                   <span className={`text-xs font-mono font-bold ${txt}`}>
-                    {result.entropyHeader > 0 ? result.entropyHeader : 'N/A'}
+                    {result.entropyHeader > 0 ? result.entropyHeader.toFixed(3) : (
+                      <span className="text-[10px] text-gray-500 font-normal italic select-none">
+                        {isAr ? 'غير متوفر' : 'Not Applicable'}
+                      </span>
+                    )}
                   </span>
                 </div>
                 {/* Tail Entropy */}
                 <div className="flex items-center justify-between">
                   <span className={`text-xs ${muted} flex items-center gap-1.5`}><ArrowDownToLine className="w-3.5 h-3.5 text-teal-400" /> {isAr ? 'إنتروبيا النهاية' : 'Tail Entropy'}</span>
                   <span className={`text-xs font-mono font-bold ${txt}`}>
-                    {result.entropyTail > 0 ? result.entropyTail : 'N/A'}
+                    {result.entropyTail > 0 ? result.entropyTail.toFixed(3) : (
+                      <span className="text-[10px] text-gray-500 font-normal italic select-none">
+                        {isAr ? 'غير متوفر' : 'Not Applicable'}
+                      </span>
+                    )}
                   </span>
                 </div>
               </div>
@@ -1032,11 +1070,17 @@ export default function FileAnalysis() {
               </div>
             </div>
 
-            {/* Bottom summary sentence */}
-            <div className={`px-5 py-3 border-t flex gap-2 items-center ${isLight ? 'border-slate-100 bg-blue-50/50' : 'border-[#1e2a3a] bg-[#0a1120]'}`}>
-              <Lightbulb className={`w-4 h-4 shrink-0 mt-0.5 ${isRansomware ? 'text-red-400' : 'text-blue-500'}`} />
-              <p className={`text-xs ${isRansomware ? 'text-red-400' : 'text-blue-400'} font-medium`}>
-                {isAr ? 'السبب الرئيسي: ' : 'Primary Reason: '}
+            {/* Bottom summary sentence (Primary Reason Info Banner) */}
+            <div className={`px-5 py-3.5 border-t flex gap-3 items-center transition-all ${
+              isLight 
+                ? 'border-slate-100 bg-blue-50/50' 
+                : 'border-[#1e2a3a] bg-blue-500/5'
+            }`}>
+              <Info className={`w-4 h-4 shrink-0 ${isRansomware ? 'text-red-400' : 'text-blue-400'}`} />
+              <p className={`text-xs ${isRansomware ? 'text-red-400' : 'text-blue-300'} font-medium`}>
+                <span className="font-bold uppercase tracking-wider text-[10px] mr-1.5 px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/25">
+                  {isAr ? 'السبب الرئيسي' : 'Primary Reason'}
+                </span>
                 {(result.detectionReasons || []).slice(0, 2).join(' | ') || (isAr ? 'الخصائص تبدو سليمة ولايوجد مؤشرات سلوكية لبرامج الفدية' : 'Properties appear benign with no ransomware indicators')}
               </p>
             </div>

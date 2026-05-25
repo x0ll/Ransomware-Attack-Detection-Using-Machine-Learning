@@ -18,6 +18,7 @@ auth_api = Blueprint("auth_api", __name__)
 # SMTP Configuration (Gmail)
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASS = os.getenv("EMAIL_PASS")
+RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL", EMAIL_USER)
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 
@@ -246,3 +247,92 @@ def delete_account():
         return jsonify({"message": "Account deleted successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+def send_ticket_email(sender_email: str, subject_text: str, message_text: str) -> tuple[bool, str]:
+    if not EMAIL_USER or not EMAIL_PASS:
+        return False, "SMTP credentials missing"
+        
+    try:
+        subject = f"🚨 SARMZ RansomGuard SOC Ticket: {subject_text}"
+        
+        html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body {{ margin: 0; padding: 0; background-color: #060d1a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }}
+                .container {{ max-width: 600px; margin: 40px auto; background: #0d1117; border: 1px solid #1e2a3a; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }}
+                .header {{ background: linear-gradient(135deg, #ef444420, #0d1117); padding: 30px; text-align: center; border-bottom: 1px solid #1e2a3a; }}
+                .logo {{ color: #fff; font-size: 24px; font-weight: 800; margin: 0; letter-spacing: 1px; }}
+                .content {{ padding: 30px; text-align: left; color: #c9d1d9; }}
+                .title {{ color: #fff; font-size: 20px; margin: 0 0 15px; font-weight: 700; border-bottom: 1px solid #1e2a3a; padding-bottom: 10px; }}
+                .field {{ margin-bottom: 20px; }}
+                .label {{ color: #8b949e; font-size: 13px; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; display: block; }}
+                .val {{ color: #ffffff; font-size: 15px; background: #0a0e1a; border: 1px solid #1e2a3a; border-radius: 8px; padding: 12px; font-family: monospace; white-space: pre-wrap; }}
+                .footer {{ padding: 20px; text-align: center; border-top: 1px solid #1e2a3a; background: #090c12; }}
+                .footer-text {{ color: #484f58; font-size: 12px; margin: 0; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1 class="logo">🚨 SARMZ SOC SUPPORT</h1>
+                </div>
+                <div class="content">
+                    <h2 class="title">New Security Ticket Submitted</h2>
+                    
+                    <div class="field">
+                        <span class="label">User/Sender Email</span>
+                        <div class="val">{sender_email}</div>
+                    </div>
+                    
+                    <div class="field">
+                        <span class="label">Subject</span>
+                        <div class="val">{subject_text}</div>
+                    </div>
+                    
+                    <div class="field">
+                        <span class="label">Message Details</span>
+                        <div class="val">{message_text}</div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <p class="footer-text">© 2026 SARMZ RansomGuard SOC System</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+        msg = MIMEMultipart("alternative")
+        msg["From"] = f"SARMZ SOC Portal <{EMAIL_USER}>"
+        msg["To"] = RECEIVER_EMAIL
+        msg["Subject"] = subject
+        msg.attach(MIMEText(html, "html"))
+
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(EMAIL_USER, EMAIL_PASS)
+            server.send_message(msg)
+            
+        return True, "ok"
+    except Exception as e:
+        print(f"[SMTP TICKET ERROR] {e}")
+        return False, str(e)
+
+@auth_api.route("/submit-soc-ticket", methods=["POST"])
+def submit_soc_ticket():
+    data = request.get_json() or {}
+    email = data.get("email", "").strip().lower()
+    subject = data.get("subject", "").strip()
+    message = data.get("message", "").strip()
+
+    if not email or not subject or not message:
+        return jsonify({"error": "Missing fields"}), 400
+
+    success, err = send_ticket_email(email, subject, message)
+    if success:
+        return jsonify({"message": "Ticket submitted successfully"}), 200
+    else:
+        return jsonify({"error": f"Failed to submit ticket: {err}"}), 500

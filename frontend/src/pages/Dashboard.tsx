@@ -598,9 +598,6 @@ export default function Dashboard() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-50 dark:divide-slate-900">
-                    <p className={`text-[9px] ${muted} mt-2 italic font-medium opacity-60`}>
-                      * Validation Dataset (N=62,485)
-                    </p>
                     {scans.slice(-10).reverse().map((s, i) => (
                       <tr key={i} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
                         <td className={`p-5 text-[10px] font-mono ${muted}`}>{s.time}</td>
@@ -629,7 +626,7 @@ export default function Dashboard() {
                         <td className="p-5">
                           <span className={`text-[9px] font-black uppercase px-3 py-1.5 rounded-lg tracking-tighter ${s.overallLabel === 'Ransomware'
                               ? 'bg-red-500/10 text-red-500 border border-red-500/20'
-                              : 'bg-green-500/10 text-green-500 border border-green-500/20'
+                              : 'bg-green-500/10 text-green-400 border border-green-500/20'
                             }`}>
                             {s.overallLabel === 'Ransomware' ? 'Threat Blocked' : 'System Verified'}
                           </span>
@@ -638,6 +635,11 @@ export default function Dashboard() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+              <div className="px-5 py-3 border-t border-slate-100 dark:border-slate-850 bg-slate-50/10 dark:bg-slate-900/10">
+                <p className={`text-[9px] ${muted} italic font-medium opacity-65`}>
+                  * Validation Dataset (N=62,485)
+                </p>
               </div>
             </div>
 
