@@ -5,7 +5,7 @@ import { getTheme, setThemeStorage, Theme } from '../lib/theme'
 import {
   Sun, Moon, Languages, Shield, Trash2, Save, CheckCircle,
   Loader2, ChevronDown, Send, MessageSquare, AlertTriangle, Download, Zap,
-  FileText, X, ShieldCheck, Eye, Lock
+  FileText, X, ShieldCheck, Eye, Lock, BookOpen
 } from 'lucide-react'
 import { API_BASE_URL } from '../lib/api-config'
 
@@ -655,8 +655,121 @@ export default function SettingsPage() {
 
         </div>{/* end LEFT column */}
 
-        {/* ── RIGHT COLUMN — SOC Support Card (full height) ── */}
-        <div className="flex flex-col">
+        {/* ── RIGHT COLUMN — Guide Card + SOC Support Card ── */}
+        <div className="flex flex-col gap-4">
+
+          {/* ── Agent Deployment Guide Card ── */}
+          <div
+            className={`${glassBase} border rounded-2xl overflow-hidden transition-all duration-300`}
+            style={isD ? { boxShadow: '0 0 0 1px rgba(59,130,246,0.12), 0 4px 24px rgba(59,130,246,0.05)' } : {}}
+          >
+            {/* Guide Header */}
+            <div
+              className={`px-5 py-3.5 border-b ${divCls} flex items-center justify-between`}
+              style={isD ? { background: 'linear-gradient(135deg, rgba(59,130,246,0.07), transparent)' } : {}}
+            >
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-xl" style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)' }}>
+                  <BookOpen className="w-4 h-4 text-blue-400" />
+                </div>
+                <div>
+                  <h3 className={`font-bold text-sm ${txt}`}>
+                    {isAr ? 'دليل نشر العميل' : 'Agent Deployment Guide'}
+                  </h3>
+                  <p className={`text-[10px] uppercase tracking-widest ${muted}`}>
+                    {isAr ? 'خطوات التفعيل' : 'Activation Steps'}
+                  </p>
+                </div>
+              </div>
+              <span
+                className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full"
+                style={{ background: 'rgba(59,130,246,0.1)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.2)' }}
+              >
+                {isAr ? '٣ خطوات' : '3 Steps'}
+              </span>
+            </div>
+
+            {/* Guide Steps */}
+            <div className="px-5 py-4 space-y-0">
+              {[
+                {
+                  num: '01',
+                  title: isAr ? 'قبول الاتفاقية' : 'Accept EULA',
+                  desc: isAr
+                    ? 'ضع علامة على خانة اتفاقية EULA أدناه لإلغاء قفل زر التحميل الآمن.'
+                    : 'Check the EULA agreement box below to unlock the secure download button.',
+                  color: '#3b82f6',
+                  glow: 'rgba(59,130,246,0.25)',
+                  icon: '✦',
+                },
+                {
+                  num: '02',
+                  title: isAr ? 'تحميل العميل الأساسي' : 'Download Core Agent',
+                  desc: isAr
+                    ? 'اضغط على الزر الأخضر لتحميل ملف التثبيت SARMZ_RansomGuard_Agent.exe'
+                    : "Click the green action button to download the 'SARMZ_RansomGuard_Agent.exe' installer.",
+                  color: '#22c55e',
+                  glow: 'rgba(34,197,94,0.25)',
+                  icon: '⬇',
+                },
+                {
+                  num: '03',
+                  title: isAr ? 'التشغيل والاتصال' : 'Run & Connect',
+                  desc: isAr
+                    ? 'شغّل المثبّت كـ Administrator لتهيئة مراقبة المحطة الطرفية ومزامنة الحالة المباشرة.'
+                    : 'Launch the installer on your system as Administrator to initialize endpoint monitoring and sync live status.',
+                  color: '#a855f7',
+                  glow: 'rgba(168,85,247,0.25)',
+                  icon: '⚡',
+                },
+              ].map((step, idx, arr) => (
+                <div key={step.num} className="flex gap-3.5">
+                  {/* Left: number bubble + connector line */}
+                  <div className="flex flex-col items-center shrink-0">
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center font-black text-[11px] shrink-0 transition-all duration-300"
+                      style={{
+                        background: `${step.color}15`,
+                        border: `1.5px solid ${step.color}40`,
+                        color: step.color,
+                        boxShadow: `0 0 10px ${step.glow}`,
+                        textShadow: `0 0 8px ${step.color}`,
+                      }}
+                    >
+                      {step.num}
+                    </div>
+                    {/* Connector line */}
+                    {idx < arr.length - 1 && (
+                      <div
+                        className="w-px flex-1 my-1"
+                        style={{ background: `linear-gradient(to bottom, ${step.color}30, transparent)`, minHeight: '20px' }}
+                      />
+                    )}
+                  </div>
+
+                  {/* Right: content */}
+                  <div className="pb-4 min-w-0">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <span className="text-base leading-none" style={{ filter: `drop-shadow(0 0 4px ${step.color})` }}>
+                        {step.icon}
+                      </span>
+                      <p
+                        className="text-xs font-black uppercase tracking-wider"
+                        style={{ color: step.color, textShadow: `0 0 8px ${step.glow}` }}
+                      >
+                        {step.title}
+                      </p>
+                    </div>
+                    <p className={`text-[11px] leading-relaxed ${muted}`}>
+                      {step.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── SOC Support Card ── */}
           <div
             className={`${glassBase} border rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-300`}
             style={socCardStyle}
