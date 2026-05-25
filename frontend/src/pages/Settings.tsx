@@ -557,9 +557,9 @@ export default function SettingsPage() {
             )}
 
             {/* EULA Checkbox + Download Button */}
-            <div className="mt-4 space-y-3">
+            <div className="mt-5 space-y-3 pl-1">
 
-              {/* EULA Checkbox row */}
+              {/* EULA Checkbox row — indented to align with toggles above */}
               <label className="flex items-start gap-2.5 cursor-pointer group select-none">
                 <div className="relative mt-0.5 shrink-0">
                   <input
