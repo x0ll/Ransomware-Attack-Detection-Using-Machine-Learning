@@ -450,7 +450,7 @@ function AuthPanel({ onLogin, lang, theme, isAr, T, onClose }: AuthPanelProps) {
       }
 
       setSuccess(T('accountCreated'))
-      setTimeout(() => go('login'), 1200)
+      setTimeout(() => go('login'), 500)
     } catch (e) {
       setLoading(false)
       setError('Server connection error')
@@ -480,7 +480,7 @@ function AuthPanel({ onLogin, lang, theme, isAr, T, onClose }: AuthPanelProps) {
 
     localStorage.setItem('rg_user_email', pendingEmail)
     setSuccess('✅ ' + T('loginSuccess'))
-    setTimeout(() => onLogin(uname), 900)
+    setTimeout(() => onLogin(uname), 150)
   }
 
   const handleForgotSend = async () => {
@@ -554,7 +554,7 @@ function AuthPanel({ onLogin, lang, theme, isAr, T, onClose }: AuthPanelProps) {
       }
 
       setSuccess(T('passwordReset'))
-      setTimeout(() => go('login'), 1200)
+      setTimeout(() => go('login'), 500)
     } catch (e) {
       setLoading(false)
       setError('Server connection error')
@@ -594,13 +594,22 @@ function AuthPanel({ onLogin, lang, theme, isAr, T, onClose }: AuthPanelProps) {
 
   return (
     <div className={`w-full relative max-w-md ${isLight ? 'text-slate-800' : 'text-white'} animate-in zoom-in-95 duration-200`} style={{ contain: 'content' }}>
-      {/* Close button for form slide overlay */}
-      <button 
+
+      {/* ── Back to Home button — always visible at top ── */}
+      <button
         onClick={onClose}
-        className="absolute -top-12 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/25"
+        className="flex items-center gap-1.5 text-xs font-bold mb-4 transition-all group"
+        style={{ color: '#6b7280' }}
+        onMouseEnter={e => (e.currentTarget.style.color = '#22c55e')}
+        onMouseLeave={e => (e.currentTarget.style.color = '#6b7280')}
       >
-        <ArrowLeft className={`w-3.5 h-3.5 ${isAr ? 'rotate-180' : ''}`} />
-        {isAr ? 'إغلاق' : 'Close'}
+        <div
+          className="w-6 h-6 rounded-lg flex items-center justify-center transition-all group-hover:scale-110"
+          style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)' }}
+        >
+          <ArrowLeft className={`w-3.5 h-3.5 text-green-500 ${isAr ? 'rotate-180' : ''}`} />
+        </div>
+        {isAr ? 'العودة للرئيسية' : 'Back to Home'}
       </button>
 
       {/* Logo */}

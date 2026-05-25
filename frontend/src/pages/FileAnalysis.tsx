@@ -808,7 +808,7 @@ export default function FileAnalysis() {
                       : sub}`}>
                       {isSig && !result.signatureMatch ? (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-green-500/20 text-green-400 border border-green-500/30 shadow-[0_0_12px_rgba(34,197,94,0.3)] text-[9px] font-black tracking-wide uppercase select-none animate-pulse">
-                          [ 🛡️ SARMZ VERIFIED ]
+                          {'[ 🛡️ SARMZ VERIFIED ]'}
                         </span>
                       ) : (
                         <>
