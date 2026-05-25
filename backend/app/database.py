@@ -145,6 +145,18 @@ def update_username(email: str, new_username: str):
     conn.commit()
     conn.close()
 
+def delete_user_by_email(email: str):
+    conn = get_connection()
+    try:
+        row = conn.execute('SELECT username FROM users WHERE email = ?', (email,)).fetchone()
+        if row:
+            username = row['username']
+            conn.execute('DELETE FROM scans WHERE username = ?', (username,))
+        conn.execute('DELETE FROM users WHERE email = ?', (email,))
+        conn.commit()
+    finally:
+        conn.close()
+
 def _native(value):
     """Coerce numpy scalars and other types for SQLite."""
     if value is None:

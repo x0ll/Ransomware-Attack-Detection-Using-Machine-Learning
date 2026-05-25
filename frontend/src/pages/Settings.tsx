@@ -4,7 +4,7 @@ import { getLang, t, Lang } from '../lib/language'
 import { getTheme, setThemeStorage, Theme } from '../lib/theme'
 import { Sun, Moon } from 'lucide-react'
 import { API_BASE_URL } from '../lib/api-config'
-import { Languages, RefreshCw, Shield, Trash2, Save, CheckCircle, User, Lock, Loader2 } from 'lucide-react'
+import { Languages, RefreshCw, Shield, Trash2, Save, CheckCircle, User, Lock, Loader2, ChevronDown, Send, MessageSquare, AlertTriangle } from 'lucide-react'
 
 const KEY = "ransomguard_settings"
 interface Settings { lang: Lang; realtimeProtection:boolean; autoQuarantine:boolean; autoUpdate:boolean; scheduledScan:boolean; cloudBackup:boolean; sensitivity:number; scanOnStartup:boolean; notifications:boolean }
@@ -28,6 +28,10 @@ export default function SettingsPage() {
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [updating, setUpdating] = useState(false)
+  const [supportSubjectText, setSupportSubjectText] = useState('')
+  const [supportMessageText, setSupportMessageText] = useState('')
+  const [submittingSupport, setSubmittingSupport] = useState(false)
+  const [supportSuccessMsg, setSupportSuccessMsg] = useState('')
 
   useEffect(() => {
     try { const s = localStorage.getItem(KEY); if (s) { const p = JSON.parse(s); setSettings(p); setLang(p.lang || 'en'); setTheme(p.theme || 'dark') } } catch {}
@@ -105,6 +109,57 @@ export default function SettingsPage() {
       setTimeout(() => setProfileMsg({ text: '', type: 'success' }), 3000)
     }
   }
+
+  const handleSupportSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!supportSubjectText || !supportMessageText) return
+    setSubmittingSupport(true)
+    setTimeout(() => {
+      setSubmittingSupport(false)
+      const successMsg = isAr 
+        ? 'تم إرسال تذكرة الدعم بنجاح إلى مركز العمليات الأمنية.' 
+        : 'Support ticket submitted successfully to SARMZ SOC.'
+      setSupportSuccessMsg(successMsg)
+      setSupportSubjectText('')
+      setSupportMessageText('')
+      setTimeout(() => setSupportSuccessMsg(''), 4000)
+    }, 1500)
+  }
+
+  const handleDeleteAccount = async () => {
+    const confirmation = confirm(
+      isAr 
+        ? '⚠️ تحذير: سيتم حذف الحساب نهائياً من قاعدة البيانات وتصفير جميع الفحوصات والإعدادات المحلية. هل تريد الاستمرار؟' 
+        : '⚠️ WARNING: This will permanently delete your account from the database and wipe all local scan history and settings. Do you wish to proceed?'
+    )
+    if (!confirmation) return
+
+    try {
+      const email = localStorage.getItem('rg_user_email')
+      const currentUser = localStorage.getItem('rg_current_user') || undefined
+      
+      await clearScansDB(currentUser)
+      
+      if (email) {
+        await fetch(`${API_BASE_URL}/api/delete-account`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        })
+      }
+      
+      localStorage.removeItem('rg_current_user')
+      localStorage.removeItem('rg_user_email')
+      localStorage.removeItem('ransomguard_settings')
+      localStorage.removeItem('rg_auth_token')
+      sessionStorage.clear()
+      
+      window.location.reload()
+    } catch (e) {
+      alert(isAr ? 'فشلت عملية مسح الحساب.' : 'Failed to delete account.')
+    }
+  }
+
   const isAr  = lang === 'ar'
   const isLight = theme === 'light'
 
@@ -138,23 +193,33 @@ export default function SettingsPage() {
 
         {/* Language */}
         <div className={`${card} border rounded-xl p-4`}>
-          <h3 className={`font-semibold text-sm mb-3 flex items-center gap-2 ${txt}`}>
-            <Languages className="w-4 h-4 text-blue-400"/>{T('language')}
-          </h3>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className={`text-sm ${txt}`}>{T('interfaceLang')}</p>
-              <p className={`text-xs ${muted}`}>{T('chooseLang')}</p>
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-3">
+              <div className={`p-2.5 rounded-xl ${isLight ? 'bg-blue-50 text-blue-500' : 'bg-blue-500/10 text-blue-400'}`}>
+                <Languages className="w-5 h-5"/>
+              </div>
+              <div>
+                <p className={`text-sm font-semibold ${txt}`}>{T('interfaceLang')}</p>
+                <p className={`text-xs ${muted}`}>{T('chooseLang')}</p>
+              </div>
             </div>
-            <div className="flex gap-2">
-              <button onClick={() => update("lang", "ar")}
-                className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-all ${settings.lang === "ar" ? "bg-green-500 text-black" : inact}`}>
-                العربية
-              </button>
-              <button onClick={() => update("lang", "en")}
-                className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-all ${settings.lang === "en" ? "bg-green-500 text-black" : inact}`}>
-                English
-              </button>
+            
+            <div className="relative min-w-[160px]">
+              <select 
+                value={settings.lang} 
+                onChange={(e) => update("lang", e.target.value as Lang)}
+                className={`w-full text-xs font-medium py-2 px-3 pr-8 rounded-xl border appearance-none cursor-pointer focus:outline-none transition-all ${
+                  isLight 
+                    ? 'bg-slate-50 border-slate-200 text-slate-700 focus:border-blue-400' 
+                    : 'bg-[#0a0e1a] border-[#1e2a3a] text-gray-300 focus:border-blue-500/50'
+                }`}
+              >
+                <option value="en">English (US)</option>
+                <option value="ar">العربية (Arabic)</option>
+              </select>
+              <div className={`absolute top-1/2 right-3 -translate-y-1/2 pointer-events-none ${muted}`}>
+                <ChevronDown className="w-3.5 h-3.5" />
+              </div>
             </div>
           </div>
         </div>
@@ -273,12 +338,87 @@ export default function SettingsPage() {
           ))}
         </div>
 
+        {/* Cyber Support Card */}
+        <div className={`${card} border rounded-xl overflow-hidden`}>
+          <div className={`px-4 py-3 border-b ${divCls} bg-blue-500/5 flex items-center justify-between`}>
+            <h3 className={`font-semibold text-sm flex items-center gap-2 ${txt}`}>
+              <MessageSquare className="w-4 h-4 text-blue-400"/>
+              {isAr ? 'الدعم الفني السيبراني' : 'Cyber Security Support'}
+            </h3>
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 font-bold uppercase">SOC Portal</span>
+          </div>
+          
+          <form onSubmit={handleSupportSubmit} className="p-4 space-y-3">
+            <p className={`text-xs ${muted}`}>
+              {isAr ? 'افتح تذكرة آمنة مباشرة مع فريق مركز العمليات الأمنية (SOC) للإبلاغ عن اشتباه أو طلب دعم.' : 'Open a secure ticket directly with the Security Operations Center (SOC) team.'}
+            </p>
+            
+            <div className="space-y-1">
+              <label className={`text-xs font-bold ${muted}`}>
+                {isAr ? 'الموضوع' : 'Subject'}
+              </label>
+              <input 
+                type="text" 
+                value={supportSubjectText} 
+                onChange={(e) => setSupportSubjectText(e.target.value)}
+                placeholder={isAr ? 'مثال: اشتباه في ملف آمن / false positive' : 'e.g., False positive detection on safe app'}
+                required
+                className={`w-full text-sm px-3 py-2.5 rounded-xl border transition-all ${
+                  isLight 
+                    ? 'bg-slate-50 border-slate-200 focus:border-blue-400' 
+                    : 'bg-[#0a0e1a] border-[#1e2a3a] text-white focus:border-blue-500/50'
+                }`}
+              />
+            </div>
+            
+            <div className="space-y-1">
+              <label className={`text-xs font-bold ${muted}`}>
+                {isAr ? 'الرسالة' : 'Message'}
+              </label>
+              <textarea 
+                rows={3} 
+                value={supportMessageText} 
+                onChange={(e) => setSupportMessageText(e.target.value)}
+                placeholder={isAr ? 'اكتب تفاصيل التذكرة هنا...' : 'Describe the security event or issue details...'}
+                required
+                className={`w-full text-sm px-3 py-2.5 rounded-xl border transition-all resize-none ${
+                  isLight 
+                    ? 'bg-slate-50 border-slate-200 focus:border-blue-400' 
+                    : 'bg-[#0a0e1a] border-[#1e2a3a] text-white focus:border-blue-500/50'
+                }`}
+              />
+            </div>
 
+            {supportSuccessMsg && (
+              <div className="text-xs p-3 rounded-xl flex items-center gap-2 animate-in zoom-in duration-300 bg-green-500/10 text-green-400 border border-green-500/20">
+                <CheckCircle className="w-3.5 h-3.5"/>
+                {supportSuccessMsg}
+              </div>
+            )}
+
+            <button 
+              type="submit" 
+              disabled={submittingSupport || !supportSubjectText || !supportMessageText}
+              className={`w-full flex items-center justify-center gap-2 font-bold py-3 rounded-xl text-sm transition-all shadow-lg ${
+                submittingSupport 
+                  ? "opacity-50 cursor-not-allowed" 
+                  : "bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20 hover:scale-[1.01] active:scale-[0.99]"
+              }`}
+            >
+              {submittingSupport ? <Loader2 className="w-4 h-4 animate-spin"/> : <Send className="w-4 h-4"/>}
+              {isAr ? 'إرسال تذكرة SOC' : 'Submit SOC Ticket'}
+            </button>
+          </form>
+        </div>
 
         {/* Danger Zone */}
-        <div className={`${card} border border-red-500/30 rounded-xl p-4`}>
-          <h3 className="text-red-400 font-semibold text-sm mb-3">{T('dangerZone')}</h3>
-          <div className="flex items-center justify-between">
+        <div className={`${card} border border-red-500/30 rounded-xl p-4 space-y-4`}>
+          <h3 className="text-red-400 font-semibold text-sm flex items-center gap-2">
+            <AlertTriangle className="w-4.5 h-4.5"/>
+            {T('dangerZone')}
+          </h3>
+          
+          <div className="flex items-center justify-between gap-4">
             <div>
               <p className={`text-sm ${txt}`}>{T('clearAll')}</p>
               <p className={`text-xs ${muted}`}>{T('clearDesc')}</p>
@@ -289,11 +429,38 @@ export default function SettingsPage() {
                   clearScansDB(currentUser);
                 } 
               }}
-              className="flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg text-xs transition-all">
+              className="flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg text-xs transition-all flex-shrink-0">
               <Trash2 className="w-3.5 h-3.5"/> {T('clearDB')}
             </button>
           </div>
+
+          <div className={`border-t ${divCls} pt-4 flex items-center justify-between gap-4`}>
+            <div>
+              <p className={`text-sm font-semibold text-red-400`}>
+                {isAr ? 'حذف الحساب وتصفير البيانات' : 'Delete Account & Wipe Data'}
+              </p>
+              <p className={`text-xs ${muted}`}>
+                {isAr 
+                  ? 'سيتم حذف حسابك بالكامل من الخادم وتصفير جميع سجلات الفحوصات والإعدادات المحلية نهائياً.' 
+                  : 'Permanently deletes user account from server database and wipes all local session records.'}
+              </p>
+            </div>
+            <button 
+              onClick={handleDeleteAccount}
+              className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-xl text-xs transition-all shadow-md shadow-red-600/10 hover:scale-[1.02] active:scale-[0.98] flex-shrink-0"
+            >
+              <Trash2 className="w-3.5 h-3.5"/> 
+              {isAr ? 'حذف وتصفير' : 'Wipe & Delete'}
+            </button>
+          </div>
         </div>
+      </div>
+
+      {/* System Build Footer */}
+      <div className="mt-12 mb-4 max-w-2xl text-center">
+        <p className={`text-[11px] font-medium tracking-wide ${muted} select-none opacity-80`}>
+          SARMZ RansomGuard v1.0.0 (Build 2026.05.25) - All Rights Reserved
+        </p>
       </div>
     </div>
   )

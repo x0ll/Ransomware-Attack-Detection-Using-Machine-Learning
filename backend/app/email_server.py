@@ -8,7 +8,7 @@ from email.mime.multipart import MIMEMultipart
 from flask import Blueprint, request, jsonify
 from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.database import create_user, get_user_by_email, mark_user_verified, update_password, update_username
+from app.database import create_user, get_user_by_email, mark_user_verified, update_password, update_username, delete_user_by_email
 
 # Load environment variables
 load_dotenv()
@@ -228,3 +228,21 @@ def update_profile():
         update_password(email, password_hash)
 
     return jsonify({"message": "Profile updated successfully", "username": user["username"]}), 200
+
+@auth_api.route("/delete-account", methods=["POST"])
+def delete_account():
+    data = request.get_json() or {}
+    email = data.get("email", "").strip().lower()
+    
+    if not email:
+        return jsonify({"error": "Email is required"}), 400
+        
+    user = get_user_by_email(email)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+        
+    try:
+        delete_user_by_email(email)
+        return jsonify({"message": "Account deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
