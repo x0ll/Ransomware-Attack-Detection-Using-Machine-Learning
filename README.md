@@ -19,7 +19,7 @@
 <p>
   <img src="https://img.shields.io/badge/ML%20Accuracy-98.9%25-success?style=for-the-badge" alt="Accuracy"/>
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License"/>
-  <img src="https://img.shields.io/badge/Version-2.1.4-red?style=for-the-badge" alt="Version"/>
+  <img src="https://img.shields.io/badge/Version-2.2.0-red?style=for-the-badge" alt="Version"/>
   <img src="https://img.shields.io/badge/Status-Production%20Ready-brightgreen?style=for-the-badge" alt="Status"/>
 </p>
 
@@ -41,7 +41,7 @@
 
 <div align="center">
   <img src="docs/screenshots/dashboard.png" width="85%" alt="Dashboard"/>
-  <br/><sub>Real-time threat metrics · Scan distribution · System integrity · Live security event log</sub>
+  <br/><sub>Real-time threat metrics · Skeleton loading states · Scan distribution · System integrity · Live security event log</sub>
 </div>
 
 <br/>
@@ -51,7 +51,7 @@
 <div align="center">
   <table>
     <tr>
-      <td align="center"><b>Sign In</b><br/><br/><img src="docs/screenshots/login.png" width="100%" alt="Login"/><br/><sub>Bilingual (EN/AR) · Dark mode toggle</sub></td>
+      <td align="center"><b>Sign In</b><br/><br/><img src="docs/screenshots/login.png" width="100%" alt="Login"/><br/><sub>Animated Cybernetic Radar · Bilingual (EN/AR) toggle · Dark mode</sub></td>
       <td align="center"><b>Create Account</b><br/><br/><img src="docs/screenshots/register.png" width="100%" alt="Register"/><br/><sub>Email OTP verification · Secure registration</sub></td>
     </tr>
   </table>
@@ -64,7 +64,7 @@
 <div align="center">
   <table>
     <tr>
-      <td align="center"><b>File Analysis Engine</b><br/><br/><img src="docs/screenshots/file_analysis.png" width="100%" alt="File Analysis"/><br/><sub>PE inspection · Entropy scoring · Multi-layer ML results</sub></td>
+      <td align="center"><b>File Analysis Engine</b><br/><br/><img src="docs/screenshots/file_analysis.png" width="100%" alt="File Analysis"/><br/><sub>PE inspection · Precision Entropy scoring · Multi-layer ML results</sub></td>
       <td align="center"><b>URL Threat Scanner</b><br/><br/><img src="docs/screenshots/url_scanner.png" width="100%" alt="URL Scanner"/><br/><sub>Real-time URL analysis for phishing & malware</sub></td>
     </tr>
   </table>
@@ -91,7 +91,7 @@
   <table>
     <tr>
       <td align="center"><b>Scan Logs</b><br/><br/><img src="docs/screenshots/scan_logs.png" width="100%" alt="Scan Logs"/><br/><sub>Full audit history · Color-coded results · Timestamps</sub></td>
-      <td align="center"><b>Settings Panel</b><br/><br/><img src="docs/screenshots/settings.png" width="100%" alt="Settings"/><br/><sub>Language · Theme · Profile · Protection config</sub></td>
+      <td align="center"><b>Settings Panel</b><br/><br/><img src="docs/screenshots/settings.png" width="100%" alt="Settings"/><br/><sub>Language · Theme · Profile · EDR Anti-Tamper · SOC Ticket System</sub></td>
     </tr>
     <tr>
       <td colspan="2" align="center"><b>📄 Executive PDF Security Report</b><br/><br/><img src="docs/screenshots/pdf_report.png" width="50%" alt="PDF Report"/><br/><sub>Auto-generated report with threat profiles, model diagnostics & MITRE ATT&amp;CK mappings</sub></td>
@@ -111,7 +111,6 @@
 ---
 
 ## 🌟 About The Project
-
 
 **SARMZ RansomGuard** is an advanced cybersecurity framework built as a graduation project, combining the power of **Machine Learning** with **real-time Endpoint Detection and Response (EDR)** to provide multi-layered ransomware protection.
 
@@ -137,12 +136,20 @@ The system operates on two fronts simultaneously:
     <td>Non-blocking background sentinel monitoring critical OS directories (Downloads, Desktop, AppData) for suspicious executables using Watchdog filesystem events.</td>
   </tr>
   <tr>
+    <td>🔒 <strong>EDR Anti-Tamper Shield</strong></td>
+    <td>Prevents unauthorized termination of the security agent process. Toggle-activated from Settings after downloading the SARMZ Agent — ensures persistent EDR protection.</td>
+  </tr>
+  <tr>
+    <td>🎫 <strong>SOC Ticket System</strong></td>
+    <td>Built-in Security Operations Center support portal — users can open secure tickets directly from the Settings page. Tickets are delivered via styled HTML email to the SOC team instantly.</td>
+  </tr>
+  <tr>
     <td>🔔 <strong>Instant OS Notifications</strong></td>
     <td>Native Windows Toast notifications alert users upon detecting and blocking high-entropy or untrusted binaries in real time — zero latency, zero interference.</td>
   </tr>
   <tr>
     <td>📊 <strong>Interactive Analytics Dashboard</strong></td>
-    <td>Live metrics showing total scans, threat distribution, detection rates, and ML performance (Accuracy, Precision, Recall, F1-Score) with beautiful interactive charts.</td>
+    <td>Live metrics showing total scans, threat distribution, detection rates, and ML performance (Accuracy, Precision, Recall, F1-Score) with skeleton loading states and beautiful interactive charts.</td>
   </tr>
   <tr>
     <td>📄 <strong>Executive PDF Reports</strong></td>
@@ -154,15 +161,19 @@ The system operates on two fronts simultaneously:
   </tr>
   <tr>
     <td>🔐 <strong>Secure Authentication System</strong></td>
-    <td>JWT token-based auth with user registration, email OTP verification, password reset flows, and granular Guest/Admin permission scoping.</td>
+    <td>JWT token-based auth with user registration, email OTP verification, password reset flows, and granular Guest/Admin permission scoping. Account deletion supported.</td>
   </tr>
   <tr>
     <td>🌍 <strong>Full Bilingual Support</strong></td>
-    <td>Complete Arabic/English UI localization with RTL layout switching and persistent user language preference.</td>
+    <td>Complete Arabic/English UI localization with RTL layout switching and a dedicated language toggle directly on the Login screen.</td>
   </tr>
   <tr>
     <td>🌙 <strong>Dark / Light Theme</strong></td>
     <td>Premium dark and light modes with smooth animated transitions and persistent user preference across sessions.</td>
+  </tr>
+  <tr>
+    <td>📡 <strong>Animated Cyber Radar</strong></td>
+    <td>A fully custom-built radar canvas animation on the Login page — featuring sweep lines, neon glow, concentric rings, and live threat blips for an immersive cybersecurity experience.</td>
   </tr>
 </table>
 
@@ -174,20 +185,23 @@ The system operates on two fronts simultaneously:
 SARMZ-RansomGuard/
 │
 ├── 🖥️ frontend/                        React + Vite Client Application
+│   ├── public/
+│   │   └── favicon.svg                 ─ Custom neon shield SVG icon
 │   ├── src/
 │   │   ├── pages/                      Route-level UI Views
-│   │   │   ├── Dashboard.tsx           ─ Live metrics & chart analytics
-│   │   │   ├── FileAnalysis.tsx        ─ Binary upload & ML classification
+│   │   │   ├── Dashboard.tsx           ─ Live metrics, skeleton loading & chart analytics
+│   │   │   ├── FileAnalysis.tsx        ─ Binary upload & precision ML classification
 │   │   │   ├── UrlScanner.tsx          ─ URL threat intelligence scanner
 │   │   │   ├── ScanLogs.tsx            ─ Historical audit log viewer
 │   │   │   ├── Alerts.tsx              ─ Real-time threat alert feed
 │   │   │   ├── Training.tsx            ─ Model retraining interface
-│   │   │   ├── Settings.tsx            ─ User profile & preferences
-│   │   │   ├── Login.tsx               ─ Secure auth entry point
+│   │   │   ├── Settings.tsx            ─ Profile · EDR Anti-Tamper · SOC Ticket portal
+│   │   │   ├── Login.tsx               ─ Animated radar canvas · Bilingual auth
 │   │   │   └── About.tsx               ─ Team & project info
 │   │   ├── components/
 │   │   │   └── Sidebar.tsx             ─ Navigation & session state
 │   │   └── lib/
+│   │       ├── api-config.ts           ─ Dynamic API routing (localhost / Render)
 │   │       ├── store.ts                ─ Global reactive state (Zustand)
 │   │       └── language.ts             ─ i18n Arabic/English translations
 │   └── index.html
@@ -196,8 +210,8 @@ SARMZ-RansomGuard/
 │   ├── app/
 │   │   ├── api_endpoints.py            ─ All REST API route handlers
 │   │   ├── file_analyzer.py            ─ Core ML threat classification engine
-│   │   ├── database.py                 ─ SQLite schema & connection management
-│   │   ├── email_server.py             ─ SMTP email OTP service
+│   │   ├── database.py                 ─ SQLite schema, CRUD & account deletion
+│   │   ├── email_server.py             ─ SMTP OTP + SOC Ticket email system
 │   │   └── server.py                   ─ Flask app factory & CORS config
 │   ├── models/
 │   │   └── random_forest_model.pkl     ─ Trained ML classifier (98.9% accuracy)
@@ -299,6 +313,8 @@ All authenticated endpoints require a valid Bearer token in the `Authorization` 
 | `/api/auth/login` | `POST` | ❌ | Login and receive JWT token |
 | `/api/auth/verify-otp` | `POST` | ❌ | Verify email OTP code |
 | `/api/auth/reset-password` | `POST` | ❌ | Trigger password reset flow |
+| `/api/auth/delete-account` | `POST` | ✅ | Permanently delete a user account |
+| `/api/auth/submit-soc-ticket` | `POST` | ✅ | Submit a SOC support ticket via email |
 | `/api/analyze` | `POST` | ✅ | Upload & analyze binary file for threats |
 | `/api/scan-url` | `POST` | ✅ | Scan a URL for malicious indicators |
 | `/api/scans` | `GET` | ✅ | Retrieve personal scan history |
@@ -343,8 +359,9 @@ All authenticated endpoints require a valid Bearer token in the `Authorization` 
    └──────────┬──────────┘              └────────────┬────────────┘
               │                                       │
    ┌──────────▼──────────┐              ┌────────────▼────────────┐
-   │  Result → Dashboard  │              │  BLOCK + OS Notification │
-   └─────────────────────┘              └─────────────────────────┘
+   │  Result → Dashboard  │              │  Anti-Tamper Shield      │
+   └─────────────────────┘              │  BLOCK + OS Notification │
+                                        └─────────────────────────┘
 ```
 
 ---
