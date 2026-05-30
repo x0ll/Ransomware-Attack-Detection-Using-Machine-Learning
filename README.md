@@ -46,57 +46,51 @@
 
 <br/>
 
-### 🔐 Authentication
+### 🔐 Authentication & Threat Analysis
 
 <div align="center">
   <table>
     <tr>
-      <td align="center"><b>Sign In</b><br/><br/><img src="docs/screenshots/login.png" width="100%" alt="Login"/><br/><sub>Animated Cybernetic Radar · Bilingual (EN/AR) toggle · Dark mode</sub></td>
-      <td align="center"><b>Create Account</b><br/><br/><img src="docs/screenshots/register.png" width="100%" alt="Register"/><br/><sub>Email OTP verification · Secure registration</sub></td>
-    </tr>
-  </table>
-</div>
-
-<br/>
-
-### 🔬 Threat Analysis
-
-<div align="center">
-  <table>
-    <tr>
+      <td align="center"><b>Sign In — Animated Cyber Radar</b><br/><br/><img src="docs/screenshots/login.png" width="100%" alt="Login"/><br/><sub>Animated Radar Canvas · Bilingual (EN/AR) toggle · Dark mode</sub></td>
       <td align="center"><b>File Analysis Engine</b><br/><br/><img src="docs/screenshots/file_analysis.png" width="100%" alt="File Analysis"/><br/><sub>PE inspection · Precision Entropy scoring · Multi-layer ML results</sub></td>
-      <td align="center"><b>URL Threat Scanner</b><br/><br/><img src="docs/screenshots/url_scanner.png" width="100%" alt="URL Scanner"/><br/><sub>Real-time URL analysis for phishing & malware</sub></td>
     </tr>
   </table>
 </div>
 
 <br/>
 
-### 🚨 Alerts & Monitoring
+### ⚙️ Settings — EDR, SOC Portal & Danger Zone
+
+<div align="center">
+  <img src="docs/screenshots/Setaing.png" width="85%" alt="Settings Panel"/>
+  <br/><sub>
+    <b>Agent Deployment Guide</b> (3-step activation) &nbsp;·&nbsp;
+    <b>EDR Core Anti-Tamper Shield</b> &nbsp;·&nbsp;
+    <b>Contact SOC Support Portal</b> (Severity levels: Low / Medium / Critical) &nbsp;·&nbsp;
+    <b>Danger Zone</b> — Permanent account & data wipe
+  </sub>
+</div>
+
+<br/>
+
+### 🚨 Alerts & Scan Logs
 
 <div align="center">
   <table>
     <tr>
       <td align="center"><b>Security Alerts</b><br/><br/><img src="docs/screenshots/alerts.png" width="100%" alt="Alerts"/><br/><sub>Critical/Warning classification · Instant visibility</sub></td>
-      <td align="center"><b>Alert Detail View</b><br/><br/><img src="docs/screenshots/alert_detail.png" width="100%" alt="Alert Detail"/><br/><sub>Threat intelligence modal · ML metrics (Accuracy, F1, Recall)</sub></td>
+      <td align="center"><b>Scan Logs</b><br/><br/><img src="docs/screenshots/scan_logs.png" width="100%" alt="Scan Logs"/><br/><sub>Full audit history · Color-coded results · Timestamps</sub></td>
     </tr>
   </table>
 </div>
 
 <br/>
 
-### 🗂️ Logs, Settings & Reports
+### 📄 Executive PDF Report
 
 <div align="center">
-  <table>
-    <tr>
-      <td align="center"><b>Scan Logs</b><br/><br/><img src="docs/screenshots/scan_logs.png" width="100%" alt="Scan Logs"/><br/><sub>Full audit history · Color-coded results · Timestamps</sub></td>
-      <td align="center"><b>Settings Panel</b><br/><br/><img src="docs/screenshots/settings.png" width="100%" alt="Settings"/><br/><sub>Language · Theme · Profile · EDR Anti-Tamper · SOC Ticket System</sub></td>
-    </tr>
-    <tr>
-      <td colspan="2" align="center"><b>📄 Executive PDF Security Report</b><br/><br/><img src="docs/screenshots/pdf_report.png" width="50%" alt="PDF Report"/><br/><sub>Auto-generated report with threat profiles, model diagnostics & MITRE ATT&amp;CK mappings</sub></td>
-    </tr>
-  </table>
+  <img src="docs/screenshots/pdf_report.png" width="55%" alt="PDF Report"/>
+  <br/><sub>Auto-generated report with threat profiles, model diagnostics & MITRE ATT&amp;CK mappings</sub>
 </div>
 
 ---
