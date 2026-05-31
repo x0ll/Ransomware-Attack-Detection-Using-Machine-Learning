@@ -37,24 +37,35 @@
 
 ## 📸 System Screenshots
 
+### 🛡️ Landing Page — Animated Cyber Radar
+
+<div align="center">
+  <img src="docs/screenshots/image88.png" width="90%" alt="SARMZ RansomGuard Landing Page"/>
+  <br/><sub>
+    <b>Next-Gen AI Ransomware Detection</b> &nbsp;·&nbsp;
+    Live Animated Radar Canvas &nbsp;·&nbsp;
+    EDR Shield Active &nbsp;·&nbsp;
+    Bilingual (EN/AR) toggle &nbsp;·&nbsp;
+    Dark / Light mode
+  </sub>
+</div>
+
+<br/>
+
 ### 🖥️ Dashboard
 
 <div align="center">
-  <img src="docs/screenshots/dashboard.png" width="85%" alt="Dashboard"/>
+  <img src="docs/screenshots/dashboard.png" width="90%" alt="Dashboard"/>
   <br/><sub>Real-time threat metrics · Skeleton loading states · Scan distribution · System integrity · Live security event log</sub>
 </div>
 
 <br/>
 
-### 🔐 Authentication & Threat Analysis
+### 🔬 File Analysis Engine
 
 <div align="center">
-  <table>
-    <tr>
-      <td align="center"><b>Sign In — Animated Cyber Radar</b><br/><br/><img src="docs/screenshots/login.png" width="100%" alt="Login"/><br/><sub>Animated Radar Canvas · Bilingual (EN/AR) toggle · Dark mode</sub></td>
-      <td align="center"><b>File Analysis Engine</b><br/><br/><img src="docs/screenshots/file_analysis.png" width="100%" alt="File Analysis"/><br/><sub>PE inspection · Precision Entropy scoring · Multi-layer ML results</sub></td>
-    </tr>
-  </table>
+  <img src="docs/screenshots/file_analysis.png" width="90%" alt="File Analysis"/>
+  <br/><sub>Binary PE inspection · Precision Entropy scoring · Multi-layer ML classification · MITRE ATT&amp;CK mapping</sub>
 </div>
 
 <br/>
@@ -62,35 +73,22 @@
 ### ⚙️ Settings — EDR, SOC Portal & Danger Zone
 
 <div align="center">
-  <img src="docs/screenshots/Setaing.png" width="85%" alt="Settings Panel"/>
+  <img src="docs/screenshots/Setaing.png" width="90%" alt="Settings Panel"/>
   <br/><sub>
     <b>Agent Deployment Guide</b> (3-step activation) &nbsp;·&nbsp;
     <b>EDR Core Anti-Tamper Shield</b> &nbsp;·&nbsp;
-    <b>Contact SOC Support Portal</b> (Severity levels: Low / Medium / Critical) &nbsp;·&nbsp;
-    <b>Danger Zone</b> — Permanent account & data wipe
+    <b>SOC Support Portal</b> (Low / Medium / Critical severity) &nbsp;·&nbsp;
+    <b>Danger Zone</b> — Permanent account &amp; data wipe
   </sub>
 </div>
 
 <br/>
 
-### 🚨 Alerts & Scan Logs
+### 🗂️ Scan Logs
 
 <div align="center">
-  <table>
-    <tr>
-      <td align="center"><b>Security Alerts</b><br/><br/><img src="docs/screenshots/alerts.png" width="100%" alt="Alerts"/><br/><sub>Critical/Warning classification · Instant visibility</sub></td>
-      <td align="center"><b>Scan Logs</b><br/><br/><img src="docs/screenshots/scan_logs.png" width="100%" alt="Scan Logs"/><br/><sub>Full audit history · Color-coded results · Timestamps</sub></td>
-    </tr>
-  </table>
-</div>
-
-<br/>
-
-### 📄 Executive PDF Report
-
-<div align="center">
-  <img src="docs/screenshots/pdf_report.png" width="55%" alt="PDF Report"/>
-  <br/><sub>Auto-generated report with threat profiles, model diagnostics & MITRE ATT&amp;CK mappings</sub>
+  <img src="docs/screenshots/scan_logs.png" width="90%" alt="Scan Logs"/>
+  <br/><sub>Full audit history · Color-coded threat results · Timestamps · Export support</sub>
 </div>
 
 ---
