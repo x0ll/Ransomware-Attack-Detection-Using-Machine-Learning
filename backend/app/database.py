@@ -1,16 +1,27 @@
 import sqlite3
 import os
 from datetime import datetime
+from supabase import create_client
 
 DB_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'ransomguard.db'))
-
-# UI "Scan Logs" page reads from table `scans` (SQLite file: ransomguard.db)
 SCAN_LOG_TABLE = "scans"
 
+SUPABASE_URL = os.getenv("SUPABASE_URL", "")
+SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+
+# Initialize Supabase client
+supabase = None
+if SUPABASE_URL and SUPABASE_SERVICE_KEY:
+    try:
+        supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+        print("✅ RansomGuard Supabase client initialized.")
+    except Exception as e:
+        print(f"❌ Failed to initialize RansomGuard Supabase client: {e}")
+else:
+    print("⚠️ Warning: Supabase credentials missing for RansomGuard.")
 
 def get_db_path() -> str:
     return DB_PATH
-
 
 def get_connection():
     conn = sqlite3.connect(DB_PATH)
@@ -180,7 +191,6 @@ def insert_scan_log(result: dict, file_path: str = None, username: str = None, s
     import json
 
     init_db()
-    conn = get_connection()
     try:
         lb = result.get('layerBreakdown') or {}
         chains = result.get('apiChains') or {}
@@ -230,23 +240,14 @@ def insert_scan_log(result: dict, file_path: str = None, username: str = None, s
             'scan_source': scan_source or result.get('scanSource') or result.get('scan_source'),
         }
 
-        table_cols = {r[1] for r in conn.execute(f"PRAGMA table_info({SCAN_LOG_TABLE})").fetchall()}
-        insert_cols = [c for c in row.keys() if c in table_cols]
-        if 'filename' not in insert_cols or 'time' not in insert_cols:
-            raise RuntimeError(f"{SCAN_LOG_TABLE} table is missing required columns")
-
-        placeholders = ", ".join("?" for _ in insert_cols)
-        col_sql = ", ".join(insert_cols)
-        values = tuple(row[c] for c in insert_cols)
-
-        cur = conn.execute(
-            f"INSERT INTO {SCAN_LOG_TABLE} ({col_sql}) VALUES ({placeholders})",
-            values,
-        )
-        conn.commit()
-        return int(cur.lastrowid)
-    finally:
-        conn.close()
+        if supabase:
+            res = supabase.table('ransomguard_alerts').insert(row).execute()
+            if res.data and len(res.data) > 0:
+                return int(res.data[0].get('id', 0))
+        return 0
+    except Exception as e:
+        print(f"Error inserting scan log into Supabase: {e}")
+        return 0
 
 
 def save_scan(result: dict, username: str = None):
@@ -259,42 +260,39 @@ def save_scan(result: dict, username: str = None):
     )
 
 def get_all_scans(username: str = None):
-    conn = get_connection()
-    if username:
-        rows = conn.execute(
-            'SELECT * FROM scans WHERE username = ? OR username = ? ORDER BY id DESC',
-            (username, 'Guest')
-        ).fetchall()
-    else:
-        rows = conn.execute('SELECT * FROM scans ORDER BY id DESC').fetchall()
-    conn.close()
-    return [dict(r) for r in rows]
+    if not supabase:
+        return []
+    try:
+        if username:
+            res = supabase.table('ransomguard_alerts').select('*').or_(f"username.eq.{username},username.eq.Guest").order('id', desc=True).execute()
+        else:
+            res = supabase.table('ransomguard_alerts').select('*').order('id', desc=True).execute()
+        return res.data
+    except Exception as e:
+        print(f"Error fetching scans from Supabase: {e}")
+        return []
 
 def delete_all_scans(username: str = None):
-    conn = get_connection()
-    if username:
-        conn.execute('DELETE FROM scans WHERE username = ? OR username = ?', (username, 'Guest'))
-    else:
-        conn.execute('DELETE FROM scans')
-    conn.commit()
-    conn.close()
-
+    if not supabase:
+        return
+    try:
+        if username:
+            supabase.table('ransomguard_alerts').delete().or_(f"username.eq.{username},username.eq.Guest").execute()
+        else:
+            supabase.table('ransomguard_alerts').delete().neq('id', 0).execute()
+    except Exception as e:
+        print(f"Error deleting scans from Supabase: {e}")
 
 def delete_ransomware_scans(username: str = None) -> int:
     """Delete alert rows only (scans where overall_label is Ransomware). Returns deleted count."""
-    conn = get_connection()
+    if not supabase:
+        return 0
     try:
         if username:
-            cur = conn.execute(
-                "DELETE FROM scans WHERE (username = ? OR username = ?) AND overall_label = ?",
-                (username, "Guest", "Ransomware"),
-            )
+            res = supabase.table('ransomguard_alerts').delete().or_(f"username.eq.{username},username.eq.Guest").eq('overall_label', 'Ransomware').execute()
         else:
-            cur = conn.execute(
-                "DELETE FROM scans WHERE overall_label = ?",
-                ("Ransomware",),
-            )
-        conn.commit()
-        return cur.rowcount
-    finally:
-        conn.close()
+            res = supabase.table('ransomguard_alerts').delete().eq('overall_label', 'Ransomware').execute()
+        return len(res.data) if res.data else 0
+    except Exception as e:
+        print(f"Error deleting ransomware scans from Supabase: {e}")
+        return 0
