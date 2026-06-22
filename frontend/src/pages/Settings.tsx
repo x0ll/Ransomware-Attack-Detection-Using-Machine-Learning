@@ -26,13 +26,12 @@ function Toggle({ value, onChange, isLight, disabled }: { value: boolean; onChan
   return (
     <button
       onClick={disabled ? undefined : onChange}
-      className={`w-11 h-6 rounded-full transition-all duration-300 relative flex-shrink-0 ${
-        disabled
-          ? (isLight ? "bg-slate-200 opacity-40 cursor-not-allowed" : "bg-[#1e2a3a] opacity-30 cursor-not-allowed")
-          : value
-            ? "bg-green-500"
-            : isLight ? "bg-slate-200" : "bg-[#1e2a3a]"
-      }`}
+      className={`w-11 h-6 rounded-full transition-all duration-300 relative flex-shrink-0 ${disabled
+        ? (isLight ? "bg-slate-200 opacity-40 cursor-not-allowed" : "bg-[#1e2a3a] opacity-30 cursor-not-allowed")
+        : value
+          ? "bg-green-500"
+          : isLight ? "bg-slate-200" : "bg-[#1e2a3a]"
+        }`}
       style={value && !disabled ? { boxShadow: '0 0 10px rgba(34,197,94,0.5)' } : {}}
     >
       <div className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-all duration-300 ${value ? "left-6" : "left-1"}`} />
@@ -178,9 +177,9 @@ function EulaModal({ onClose, isAr }: { onClose: () => void; isAr: boolean }) {
 
 /* ── Severity Badge ── */
 const SEVERITY_CONFIG: Record<string, { label: string; labelAr: string; color: string; bg: string; border: string }> = {
-  low:      { label: 'Low',      labelAr: 'منخفض',   color: '#22c55e', bg: 'rgba(34,197,94,0.08)',   border: 'rgba(34,197,94,0.25)'   },
-  medium:   { label: 'Medium',   labelAr: 'متوسط',   color: '#f59e0b', bg: 'rgba(245,158,11,0.08)',  border: 'rgba(245,158,11,0.25)'  },
-  critical: { label: 'Critical', labelAr: 'حرج',     color: '#ef4444', bg: 'rgba(239,68,68,0.08)',   border: 'rgba(239,68,68,0.3)'    },
+  low: { label: 'Low', labelAr: 'منخفض', color: '#22c55e', bg: 'rgba(34,197,94,0.08)', border: 'rgba(34,197,94,0.25)' },
+  medium: { label: 'Medium', labelAr: 'متوسط', color: '#f59e0b', bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.25)' },
+  critical: { label: 'Critical', labelAr: 'حرج', color: '#ef4444', bg: 'rgba(239,68,68,0.08)', border: 'rgba(239,68,68,0.3)' },
 }
 
 export default function SettingsPage() {
@@ -215,7 +214,7 @@ export default function SettingsPage() {
       } else {
         localStorage.setItem(KEY, JSON.stringify(DEFAULT))
       }
-    } catch {}
+    } catch { }
     window.addEventListener('theme-changed', () => setTheme(getTheme()))
   }, [])
 
@@ -389,8 +388,8 @@ export default function SettingsPage() {
     ? 'bg-[#0d1117]/80 backdrop-blur-md border-[#1e2a3a]'
     : 'bg-white/80 backdrop-blur-md border-slate-200'
 
-  const txt    = isLight ? 'text-slate-800' : 'text-white'
-  const muted  = isLight ? 'text-slate-500' : 'text-gray-500'
+  const txt = isLight ? 'text-slate-800' : 'text-white'
+  const muted = isLight ? 'text-slate-500' : 'text-gray-500'
   const divCls = isLight ? 'border-slate-100' : 'border-[#1e2a3a]'
   const btnBrd = isLight ? 'border-slate-200 text-slate-600 hover:bg-slate-100' : 'border-[#1e2a3a] text-gray-400 hover:text-white hover:border-slate-600'
   const inputCls = isLight
@@ -592,11 +591,11 @@ export default function SettingsPage() {
                 </span>
               </label>
 
+
               {/* Download Button — disabled until EULA accepted */}
               <a
-                href={eulaAccepted ? 'https://drive.google.com/file/d/1vZB5fI02BZN2n5vlG2BijAnV-WlLeoQM/view?usp=sharing' : undefined}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={eulaAccepted ? '/SARMZRansomGuard_Agent.exe' : undefined}
+                download="SARMZRansomGuard_Agent.exe"
                 onClick={eulaAccepted ? () => { localStorage.setItem('rg_agent_downloaded', 'true'); setIsAgentDownloaded(true) } : e => e.preventDefault()}
                 aria-disabled={!eulaAccepted}
                 className="w-full flex items-center justify-center gap-2 font-bold py-3 px-4 rounded-xl text-sm transition-all duration-300"
@@ -871,11 +870,10 @@ export default function SettingsPage() {
               <button
                 type="submit"
                 disabled={submittingSupport || !supportSubjectText || !supportMessageText}
-                className={`w-full flex items-center justify-center gap-2 font-bold py-3 rounded-xl text-sm transition-all ${
-                  submittingSupport
-                    ? "opacity-50 cursor-not-allowed bg-blue-600 text-white"
-                    : "bg-blue-600 hover:bg-blue-700 text-white hover:scale-[1.01] active:scale-[0.99]"
-                }`}
+                className={`w-full flex items-center justify-center gap-2 font-bold py-3 rounded-xl text-sm transition-all ${submittingSupport
+                  ? "opacity-50 cursor-not-allowed bg-blue-600 text-white"
+                  : "bg-blue-600 hover:bg-blue-700 text-white hover:scale-[1.01] active:scale-[0.99]"
+                  }`}
                 style={!submittingSupport ? { boxShadow: '0 4px 20px rgba(59,130,246,0.3)' } : {}}
               >
                 {submittingSupport ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}

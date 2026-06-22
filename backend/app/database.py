@@ -1,13 +1,29 @@
 import sqlite3
 import os
+import sys
 from datetime import datetime
+from dotenv import load_dotenv
 from supabase import create_client
+
+# Dynamically locate and load the .env file
+if getattr(sys, 'frozen', False):
+    # Running inside a PyInstaller compiled .exe bundle
+    base_dir = os.path.dirname(sys.executable)
+else:
+    # Running in standard Python development mode
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+env_path = os.path.join(base_dir, '.env')
+if os.path.exists(env_path):
+    load_dotenv(env_path)
+else:
+    load_dotenv() # Fallback to standard load
 
 DB_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'ransomguard.db'))
 SCAN_LOG_TABLE = "scans"
 
-SUPABASE_URL = os.getenv("SUPABASE_URL", "")
-SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+SUPABASE_URL = "https://irtopfmptbwhrbkmezuw.supabase.co"
+SUPABASE_SERVICE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlydG9wZm1wdGJ3aHJia21lenV3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MjA0OTg0MSwiZXhwIjoyMDk3NjI1ODQxfQ.Alzufrcd8kllSrqXH9d2IGIc9NOrHJrPOjxZBNxNbjI"
 
 # Initialize Supabase client
 supabase = None
@@ -185,70 +201,28 @@ def _native(value):
 
 def insert_scan_log(result: dict, file_path: str = None, username: str = None, scan_source: str = None) -> int:
     """
-    Insert one scan row into `scans` (Scan Logs in the frontend).
-    Returns the new row id.
+    Insert one scan row into `ransomguard_alerts` matching the exact Supabase schema.
     """
-    import json
-
+    
     init_db()
     try:
-        lb = result.get('layerBreakdown') or {}
-        chains = result.get('apiChains') or {}
-        yara = result.get('yaraMatches') or {}
-        metrics = result.get('metrics') or {}
-        reasons = result.get('detectionReasons') or []
-        if isinstance(reasons, str):
-            reasons_json = reasons
-        else:
-            reasons_json = json.dumps(reasons, ensure_ascii=False)
-
+        # تجهيز البيانات لتطابق أعمدة الجدول في السحاب بالملي
         row = {
-            'filename': result.get('filename', 'unknown'),
-            'time': result.get('time') or datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            'total_rows': _native(result.get('totalRows', 1)),
-            'total_features': _native(result.get('totalFeatures', 0)),
-            'benign_count': _native(result.get('benignCount', 0)),
-            'ransomware_count': _native(result.get('ransomwareCount', 0)),
-            'overall_label': result.get('overallLabel', 'Unknown'),
-            'overall_confidence': _native(result.get('overallConfidence', 0)),
-            'accuracy': _native(metrics.get('accuracy', 0)),
-            'precision': _native(metrics.get('precision', 0)),
-            'recall': _native(metrics.get('recall', 0)),
-            'f1': _native(metrics.get('f1', 0)),
-            'username': username,
-            'risk_score': _native(result.get('riskScore', 0)),
-            'entropy': _native(result.get('entropy', 0)),
-            'entropy_header': _native(result.get('entropyHeader', 0)),
-            'entropy_middle': _native(result.get('entropyMiddle', 0)),
-            'entropy_tail': _native(result.get('entropyTail', 0)),
-            'signature_match': 1 if result.get('signatureMatch') else 0,
-            'signature_family': result.get('signatureFamily'),
-            'file_size': _native(result.get('fileSize', 0)),
-            'file_type': result.get('fileType'),
-            'layer_signatures': _native(lb.get('signatures', 0)),
-            'layer_entropy': _native(lb.get('entropy', 0)),
-            'layer_pe': _native(lb.get('peStructure', 0)),
-            'layer_behavior': _native(lb.get('behavior', 0)),
-            'yara_matched_count': _native(result.get('yaraMatchedCount', 0)),
-            'yara_total_score': _native(result.get('yaraTotalScore', yara.get('totalScore', 0))),
-            'chain_count': _native(result.get('chainCount', chains.get('chainCount', 0))),
-            'chain_score': _native(result.get('chainScore', chains.get('totalScore', 0))),
-            'detection_reasons': reasons_json,
-            'verdict_reason_en': result.get('verdictReasonEn') or '',
-            'verdict_reason_ar': result.get('verdictReasonAr') or '',
-            'file_path': file_path or result.get('filePath') or result.get('file_path'),
-            'scan_source': scan_source or result.get('scanSource') or result.get('scan_source'),
+            'file_path': file_path or result.get('filePath') or result.get('file_path') or result.get('filename', 'unknown'),
+            'behavior_type': result.get('overall_label') or result.get('overallLabel', 'Ransomware'),
+            'threat_level': 'CRITICAL' if _native(result.get('riskScore', 0)) > 75 else 'HIGH'
         }
 
         if supabase:
             res = supabase.table('ransomguard_alerts').insert(row).execute()
+            # التحقق من نجاح الإرسال وطباعة تأكيد في التيرمينال
             if res.data and len(res.data) > 0:
+                print("🚀 [Supabase] Alert successfully synced to cloud!")
                 return int(res.data[0].get('id', 0))
         return 0
     except Exception as e:
-        print(f"Error inserting scan log into Supabase: {e}")
+        print(f"❌ Error inserting scan log into Supabase: {e}")
         return 0
-
 
 def save_scan(result: dict, username: str = None):
     """Backward-compatible wrapper used by the Flask API."""

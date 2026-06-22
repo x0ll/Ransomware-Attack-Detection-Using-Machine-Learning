@@ -7,8 +7,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from flask import Blueprint, request, jsonify
 from dotenv import load_dotenv
-from werkzeug.security import generate_password_hash, check_password_hash
-from app.database import create_user, get_user_by_email, mark_user_verified, update_password, update_username, delete_user_by_email
+from app.database import supabase, delete_user_by_email
 
 # Load environment variables
 load_dotenv()
@@ -99,28 +98,50 @@ def send_email(to_email: str, code: str, purpose: str = "verify") -> tuple[bool,
         return False, str(e)
 
 
+def get_supabase_user_by_email(email: str):
+    if not supabase:
+        return None
+    try:
+        res = supabase.auth.admin.list_users()
+        users = getattr(res, "users", res) or []
+        for u in users:
+            if getattr(u, "email", "").lower() == email.lower():
+                return u
+    except Exception as e:
+        print(f"[Supabase Admin Error] List users failed: {e}")
+    return None
+
 @auth_api.route("/send-code", methods=["POST"])
 def send_code():
     data    = request.get_json() or {}
     email   = data.get("email",   "").strip().lower()
     purpose = data.get("purpose", "verify")
 
-    if not email or "@" not in email or "." not in email.split("@")[-1]:
+    if not email or "@" not in email:
         return jsonify({"error": "Invalid email address"}), 400
 
-    code       = generate_code()
-    expires_at = time.time() + 600  # expires in 10 minutes
+    if not supabase:
+        return jsonify({"error": "Supabase client not initialized"}), 500
 
-    _codes[email] = {"code": code, "expires_at": expires_at}
-
-    success, err = send_email(email, code, purpose)
-
-    if success:
-        print(f"[EMAIL OK] Code sent to {email}")
+    try:
+        if purpose == "reset":
+            # Send password reset OTP via Supabase Auth
+            supabase.auth.reset_password_for_email(email)
+            print(f"[Supabase Auth] Reset code sent to {email}")
+        else:
+            # Try to send a login/verification OTP
+            try:
+                supabase.auth.sign_in_with_otp({"email": email})
+                print(f"[Supabase Auth] Login OTP sent to {email}")
+            except Exception as e:
+                # If unconfirmed, sign_in_with_otp might fail. Resend signup confirmation.
+                supabase.auth.resend({"type": "signup", "email": email})
+                print(f"[Supabase Auth] Signup OTP resent to {email}")
+                
         return jsonify({"message": "Code sent successfully"}), 200
-    else:
-        print(f"[EMAIL FAIL] {err}")
-        return jsonify({"error": f"Failed to send: {err}"}), 500
+    except Exception as e:
+        print(f"[Supabase Auth Error] Send code failed: {e}")
+        return jsonify({"error": f"Failed to send code: {str(e)}"}), 500
 
 
 @auth_api.route("/verify-code", methods=["POST"])
@@ -129,22 +150,26 @@ def verify_code():
     email = data.get("email", "").strip().lower()
     code  = data.get("code",  "").strip()
 
-    stored = _codes.get(email)
-    if not stored:
-        return jsonify({"valid": False, "error": "No code found"}), 400
+    if not email or not code:
+        return jsonify({"valid": False, "error": "Missing fields"}), 400
 
-    if time.time() > stored["expires_at"]:
-        del _codes[email]
-        return jsonify({"valid": False, "error": "Code expired"}), 400
+    if not supabase:
+        return jsonify({"valid": False, "error": "Supabase client not initialized"}), 500
 
-    if stored["code"] != code:
-        return jsonify({"valid": False, "error": "Invalid code"}), 400
-
-    del _codes[email]
-    # Mark the user as verified in the database
-    mark_user_verified(email)
-
-    return jsonify({"valid": True}), 200
+    # Try verifying as email OTP (login)
+    try:
+        supabase.auth.verify_otp({"email": email, "token": code, "type": "email"})
+        print(f"[Supabase Auth] Email OTP verified for {email}")
+        return jsonify({"valid": True}), 200
+    except Exception as e:
+        # Try verifying as signup OTP
+        try:
+            supabase.auth.verify_otp({"email": email, "token": code, "type": "signup"})
+            print(f"[Supabase Auth] Signup OTP verified for {email}")
+            return jsonify({"valid": True}), 200
+        except Exception as e2:
+            print(f"[Supabase Auth Error] Verify OTP failed for {email}: {e} | {e2}")
+            return jsonify({"valid": False, "error": "Invalid verification code"}), 400
 
 
 @auth_api.route("/register", methods=["POST"])
@@ -157,15 +182,25 @@ def register():
     if not username or not email or not password:
         return jsonify({"error": "Missing fields"}), 400
 
-    if get_user_by_email(email):
-        return jsonify({"error": "Email already registered"}), 400
+    if not supabase:
+        return jsonify({"error": "Supabase client not initialized"}), 500
 
-    password_hash = generate_password_hash(password)
-
-    if create_user(username, email, password_hash):
+    try:
+        res = supabase.auth.sign_up({
+            "email": email,
+            "password": password,
+            "options": {
+                "data": {
+                    "username": username
+                }
+            }
+        })
         return jsonify({"message": "User registered successfully"}), 200
-    else:
-        return jsonify({"error": "Registration failed"}), 500
+    except Exception as e:
+        err_msg = str(e)
+        if "already registered" in err_msg.lower() or "already exists" in err_msg.lower():
+            return jsonify({"error": "Email already registered"}), 400
+        return jsonify({"error": err_msg}), 500
 
 @auth_api.route("/login", methods=["POST"])
 def login():
@@ -173,19 +208,40 @@ def login():
     email = data.get("email", "").strip().lower()
     password = data.get("password", "")
 
-    user = get_user_by_email(email)
+    if not email or not password:
+        return jsonify({"error": "Missing fields"}), 400
 
-    if not user or not check_password_hash(user["password_hash"], password):
+    if not supabase:
+        return jsonify({"error": "Supabase client not initialized"}), 500
+
+    try:
+        res = supabase.auth.sign_in_with_password({
+            "email": email,
+            "password": password
+        })
+        user_data = res.user
+        username = user_data.user_metadata.get("username", "User") if user_data and user_data.user_metadata else "User"
+        return jsonify({"message": "Login successful", "username": username}), 200
+    except Exception as e:
+        err_msg = str(e)
+        if "confirm" in err_msg.lower() or "verified" in err_msg.lower():
+            # If the email is unconfirmed, but the password is correct, allow user to proceed to verification code screen
+            u = get_supabase_user_by_email(email)
+            if u:
+                username = u.user_metadata.get("username", "User") if u.user_metadata else "User"
+                return jsonify({"message": "Login successful", "username": username}), 200
         return jsonify({"error": "Invalid email or password"}), 401
-
-    return jsonify({"message": "Login successful", "username": user["username"]}), 200
 
 @auth_api.route("/check-email", methods=["POST"])
 def check_email():
     data = request.get_json() or {}
     email = data.get("email", "").strip().lower()
 
-    if get_user_by_email(email):
+    if not email:
+        return jsonify({"exists": False}), 400
+
+    user = get_supabase_user_by_email(email)
+    if user:
         return jsonify({"exists": True}), 200
     else:
         return jsonify({"error": "Email not found"}), 404
@@ -194,18 +250,29 @@ def check_email():
 def reset_password():
     data = request.get_json() or {}
     email = data.get("email", "").strip().lower()
+    code = data.get("code", "").strip()
     new_password = data.get("newPassword", "")
 
-    if not get_user_by_email(email):
-        return jsonify({"error": "User not found"}), 404
+    if not email or not code or not new_password:
+        return jsonify({"error": "Missing fields"}), 400
 
-    if len(new_password) < 6:
-        return jsonify({"error": "Password too short"}), 400
+    if not supabase:
+        return jsonify({"error": "Supabase client not initialized"}), 500
 
-    password_hash = generate_password_hash(new_password)
-    update_password(email, password_hash)
-
-    return jsonify({"message": "Password reset successfully"}), 200
+    try:
+        # 1. Verify recovery OTP
+        supabase.auth.verify_otp({"email": email, "token": code, "type": "recovery"})
+        # 2. Get user object
+        user = get_supabase_user_by_email(email)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        # 3. Update password via Admin API
+        supabase.auth.admin.update_user_by_id(user.id, {"password": new_password})
+        print(f"[Supabase Auth] Password reset successful for {email}")
+        return jsonify({"message": "Password reset successfully"}), 200
+    except Exception as e:
+        print(f"[Supabase Auth Error] Reset password failed: {e}")
+        return jsonify({"error": f"Password reset failed: {str(e)}"}), 400
     
 @auth_api.route("/update-profile", methods=["POST"])
 def update_profile():
@@ -214,21 +281,34 @@ def update_profile():
     new_username = data.get("newUsername", "").strip()
     new_password = data.get("newPassword", "")
 
-    user = get_user_by_email(email)
+    if not email:
+        return jsonify({"error": "Email is required"}), 400
+
+    if not supabase:
+        return jsonify({"error": "Supabase client not initialized"}), 500
+
+    user = get_supabase_user_by_email(email)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    if new_username:
-        update_username(email, new_username)
-        user["username"] = new_username
+    try:
+        attrs = {}
+        if new_username:
+            current_metadata = getattr(user, "user_metadata", {}) or {}
+            current_metadata["username"] = new_username
+            attrs["user_metadata"] = current_metadata
+        if new_password:
+            if len(new_password) < 6:
+                return jsonify({"error": "Password too short"}), 400
+            attrs["password"] = new_password
 
-    if new_password:
-        if len(new_password) < 6:
-            return jsonify({"error": "Password too short"}), 400
-        password_hash = generate_password_hash(new_password)
-        update_password(email, password_hash)
-
-    return jsonify({"message": "Profile updated successfully", "username": user["username"]}), 200
+        if attrs:
+            supabase.auth.admin.update_user_by_id(user.id, attrs)
+            print(f"[Supabase Auth] Profile updated for {email}")
+        return jsonify({"message": "Profile updated successfully", "username": new_username or getattr(user, "user_metadata", {}).get("username", "User")}), 200
+    except Exception as e:
+        print(f"[Supabase Auth Error] Update profile failed: {e}")
+        return jsonify({"error": str(e)}), 500
 
 @auth_api.route("/delete-account", methods=["POST"])
 def delete_account():
@@ -237,15 +317,24 @@ def delete_account():
     
     if not email:
         return jsonify({"error": "Email is required"}), 400
+
+    if not supabase:
+        return jsonify({"error": "Supabase client not initialized"}), 500
         
-    user = get_user_by_email(email)
+    user = get_supabase_user_by_email(email)
     if not user:
         return jsonify({"error": "User not found"}), 404
         
     try:
-        delete_user_by_email(email)
+        supabase.auth.admin.delete_user(user.id)
+        try:
+            delete_user_by_email(email)
+        except Exception as sqlite_err:
+            print(f"Non-critical SQLite delete user warning: {sqlite_err}")
+        print(f"[Supabase Auth] Account deleted for {email}")
         return jsonify({"message": "Account deleted successfully"}), 200
     except Exception as e:
+        print(f"[Supabase Auth Error] Delete account failed: {e}")
         return jsonify({"error": str(e)}), 500
 
 def send_ticket_email(sender_email: str, subject_text: str, message_text: str) -> tuple[bool, str]:
