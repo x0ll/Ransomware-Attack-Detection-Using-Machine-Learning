@@ -364,7 +364,7 @@ All authenticated endpoints require a valid Bearer token in the `Authorization` 
 
 | <img src="https://github.com/x0ll.png" width="80" style="border-radius:50%"/> | <img src="https://github.com/JAxTeller8.png" width="80" style="border-radius:50%"/> |
 |:---:|:---:|
-| **Saud Al-Asmari** | **Abdulrahman Alfaifi** |Mohammed Obaid
+| **Saud Al-Asmari** | **Abdulrahman Alfaifi** |**Mohamed ALobaid**
 | [![GitHub](https://img.shields.io/badge/GitHub-x0ll-181717?style=flat-square&logo=github)](https://github.com/x0ll) | [![GitHub](https://img.shields.io/badge/GitHub-JAxTeller8-181717?style=flat-square&logo=github)](https://github.com/JAxTeller8) |[![GitHub](https://github.com/mohamedalobaid7) |
 
 </div>
