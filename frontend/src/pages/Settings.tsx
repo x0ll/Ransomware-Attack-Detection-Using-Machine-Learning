@@ -594,7 +594,7 @@ export default function SettingsPage() {
 
               {/* Download Button — disabled until EULA accepted */}
               <a
-                href={eulaAccepted ? 'https://docs.google.com/uc?export=download&id=1vZB5fI02BZN2n5vlG2BijAnV-WlLeoQM' : undefined}
+                href={eulaAccepted ? 'https://drive.google.com/uc?export=download&id=1vZB5fI02BZN2n5vlG2BijAnV-WlLeoQM&confirm=t' : undefined}
                 download="SARMZRansomGuard_Agent.exe"
                 onClick={eulaAccepted ? () => { localStorage.setItem('rg_agent_downloaded', 'true'); setIsAgentDownloaded(true) } : e => e.preventDefault()}
                 aria-disabled={!eulaAccepted}
