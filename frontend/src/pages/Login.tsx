@@ -329,8 +329,8 @@ function AuthPanel({ onLogin, lang, theme, isAr, T, onClose }: AuthPanelProps) {
   const [screen, setScreen] = useState<Screen>('login')
 
   // Uncontrolled input references to bypass React diff/rendering lags during typing
-  const loginEmailRef = useRef<HTMLInputElement>(null)
-  const loginPasswordRef = useRef<HTMLInputElement>(null)
+  const emailRef = useRef<HTMLInputElement>(null)
+  const passwordRef = useRef<HTMLInputElement>(null)
   const [showLoginPw, setShowLoginPw] = useState(false)
 
   // Registration States (typing lag is not a critical issue inside separate sub-screens)
@@ -372,10 +372,11 @@ function AuthPanel({ onLogin, lang, theme, isAr, T, onClose }: AuthPanelProps) {
 
   const go = (s: Screen) => { setScreen(s); setError(''); setSuccess('') }
 
-  const handleLogin = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
     setError('')
-    const email = loginEmailRef.current?.value || ''
-    const password = loginPasswordRef.current?.value || ''
+    const email = emailRef.current?.value || ''
+    const password = passwordRef.current?.value || ''
 
     if (!email || !password) { setError(T('emailInvalid')); return }
 
@@ -442,11 +443,11 @@ function AuthPanel({ onLogin, lang, theme, isAr, T, onClose }: AuthPanelProps) {
       setLoading(false)
 
       // Directly update the Sign In refs for seamless transition
-      if (loginEmailRef.current) {
-        loginEmailRef.current.value = regEmail
+      if (emailRef.current) {
+        emailRef.current.value = regEmail
       }
-      if (loginPasswordRef.current) {
-        loginPasswordRef.current.value = ''
+      if (passwordRef.current) {
+        passwordRef.current.value = ''
       }
 
       setSuccess(T('accountCreated'))
@@ -584,8 +585,8 @@ function AuthPanel({ onLogin, lang, theme, isAr, T, onClose }: AuthPanelProps) {
   const inputCls = (extra = '') =>
     `w-full border rounded-lg py-2 text-sm focus:outline-none focus:border-green-500 transition-colors ${isLight ? 'bg-[#f8fafc] border-slate-200 text-slate-800 placeholder-slate-400' : 'bg-[#0a0e1a] border-[#1e2a3a] text-white placeholder-gray-600'} ${extra}`
 
-  const BtnPrimary = ({ onClick, children, disabled }: any) => (
-    <button onClick={onClick} disabled={disabled || loading}
+  const BtnPrimary = ({ onClick, children, disabled, type = "button" }: any) => (
+    <button onClick={type === "submit" ? undefined : onClick} disabled={disabled || loading} type={type}
       className="w-full bg-green-500 hover:bg-green-600 text-black font-bold py-2.5 rounded-lg text-sm transition-all shadow-lg shadow-green-500/20 disabled:opacity-50 flex items-center justify-center gap-2">
       {loading && <Loader2 className="w-4 h-4 animate-spin" />}
       {children}
@@ -628,16 +629,17 @@ function AuthPanel({ onLogin, lang, theme, isAr, T, onClose }: AuthPanelProps) {
           <h2 className={`text-lg font-bold mb-1 ${isLight ? 'text-slate-800' : 'text-white'}`}>{T('login')}</h2>
           <p className="text-gray-500 text-xs mb-5">{T('monitorDesc')}</p>
           <ErrorBox /><SuccessBox />
-          <div className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="text-gray-400 text-xs mb-1.5 block">{T('email')}</label>
               <div className="relative">
                 <Mail className={`absolute top-3 ${isAr ? 'right-3' : 'left-3'} w-4 h-4 text-gray-500`} />
                 <input 
-                  ref={loginEmailRef}
-                  onKeyDown={e => e.key === 'Enter' && handleLogin()} 
+                  ref={emailRef}
+                  type="email"
                   placeholder={T('emailPlaceholder')}
                   className={inputCls(isAr ? 'pr-9 pl-3' : 'pl-9 pr-3')} 
+                  required
                 />
               </div>
             </div>
@@ -646,24 +648,24 @@ function AuthPanel({ onLogin, lang, theme, isAr, T, onClose }: AuthPanelProps) {
               <div className="relative">
                 <Lock className={`absolute top-3 ${isAr ? 'right-3' : 'left-3'} w-4 h-4 text-gray-500`} />
                 <input 
-                  ref={loginPasswordRef}
+                  ref={passwordRef}
                   type={showLoginPw ? 'text' : 'password'} 
-                  onKeyDown={e => e.key === 'Enter' && handleLogin()} 
                   placeholder={T('passwordPlaceholder')}
                   className={inputCls(isAr ? 'pr-9 pl-9' : 'pl-9 pr-9')} 
+                  required
                 />
-                <button onClick={() => setShowLoginPw(v => !v)} className={`absolute top-3 ${isAr ? 'left-3' : 'right-3'} text-gray-500 hover:text-gray-300`}>
+                <button type="button" onClick={() => setShowLoginPw(v => !v)} className={`absolute top-3 ${isAr ? 'left-3' : 'right-3'} text-gray-500 hover:text-gray-300`}>
                   {showLoginPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
               <div className="mt-2 flex justify-end">
-                <button onClick={() => go('forgot')} className="text-green-400 hover:text-green-300 text-xs font-medium transition-colors underline underline-offset-2">
+                <button type="button" onClick={() => go('forgot')} className="text-green-400 hover:text-green-300 text-xs font-medium transition-colors underline underline-offset-2">
                   {T('Forgot Password')}
                 </button>
               </div>
             </div>
-            <BtnPrimary onClick={handleLogin}>{T('loginBtn')}</BtnPrimary>
-          </div>
+            <BtnPrimary type="submit">{T('loginBtn')}</BtnPrimary>
+          </form>
           <p className="text-center text-gray-500 text-xs mt-4">
             {T('noAccount')}{' '}
             <button onClick={() => go('register')} className="text-green-400 hover:text-green-300 font-medium">{T('signUpLink')}</button>
