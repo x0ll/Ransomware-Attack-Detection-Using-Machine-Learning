@@ -364,8 +364,8 @@ All authenticated endpoints require a valid Bearer token in the `Authorization` 
 
 | <img src="https://github.com/x011.png" width="80" style="border-radius:50%"/> | <img src="https://github.com/JAxTeller8.png" width="80" style="border-radius:50%"/> | <img src="https://github.com/mohamedalobaid7.png" width="80" style="border-radius:50%"/> |
 |:---:|:---:|:---:|
-| **Saud Al-Asmari** | **Abdulrahman Alfaifi** | **Mohamed ALobaid** |
-| [![GitHub](https://img.shields.io/badge/GitHub-x011-181717?style=flat-square&logo=github)](https://github.com/x011) | [![GitHub](https://img.shields.io/badge/GitHub-JAxTeller8-181717?style=flat-square&logo=github)](https://github.com/JAxTeller8) | [![GitHub](https://img.shields.io/badge/GitHub-mohamedalobaid7-181717?style=flat-square&logo=github)](https://github.com/mohamedalobaid7) |
+| **Saud Al-Asmari** | **Abdulrahman Alfaifi** | **Mohamed ALobaid** | **Saeed Al Jaber Al-Shahrani** |
+| [![GitHub](https://img.shields.io/badge/GitHub-x011-181717?style=flat-square&logo=github)](https://github.com/x011) | [![GitHub](https://img.shields.io/badge/GitHub-JAxTeller8-181717?style=flat-square&logo=github)](https://github.com/JAxTeller8) | [![GitHub](https://img.shields.io/badge/GitHub-mohamedalobaid7-181717?style=flat-square&logo=github)](https://github.com/mohamedalobaid7) | [![GitHub](https://img.shields.io/badge/GitHub-saeod-181717?style=flat-square&logo=github)](https://github.com/saeod) |
 
 </div>
 
